@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +12,7 @@ using WazeBotDiscord.Glossary;
 using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
+using WazeBotDiscord.Tiles;
 
 namespace WazeBotDiscord
 {
@@ -66,6 +67,9 @@ namespace WazeBotDiscord
             var lookupService = new LookupService(httpClient);
             await lookupService.InitAsync();
 
+            //var tilesService = new TilesService(httpClient);
+            //await tilesService.InitTilesServiceAsync();
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(autoreplyService);
@@ -73,8 +77,9 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(lookupService);
             serviceCollection.AddSingleton(glossaryService);
             serviceCollection.AddSingleton(httpClient);
+            //serviceCollection.AddSingleton(tilesService);
 
-            client.Ready += async () => await client.SetGameAsync("with email addresses");
+            //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
             var twitterService = new TwitterService(client);
             serviceCollection.AddSingleton(twitterService);
