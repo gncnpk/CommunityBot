@@ -10,8 +10,6 @@
         public const ulong Michigan = 299567520652853248;
         public const ulong Ohio = 299563222107815936;
         public const ulong Wisconsin = 299563313203904512;
-        public const ulong MichiganFireside = 299944370386239488;
-        public const ulong OhioFireside = 300315151435825152;
     }
 
     public static class GreatLakesRoles
