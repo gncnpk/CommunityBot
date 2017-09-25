@@ -1,10 +1,12 @@
 ﻿using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WazeBotDiscord.Lookup
@@ -107,7 +109,7 @@ namespace WazeBotDiscord.Lookup
 
             for (var i = 0; i < matchCount; i++)
             {
-                result.AppendLine("```");
+                //result.AppendLine("```");
 
                 for (var j = 0; j < matches[i].Count; j++)
                 {
@@ -117,13 +119,21 @@ namespace WazeBotDiscord.Lookup
                     result.Append(matches[i][j]);
                     result.Append(" | ");
                 }
-
+                if (matchCount > 0 && i != matchCount - 1)
+                    result.AppendLine(Environment.NewLine);
                 result.Remove(result.Length - 3, 3);
 
-                result.AppendLine("```");
+                //result.AppendLine("```");
             }
-            
-            return result.ToString();
+            string resultString = result.ToString();
+            Regex regURL =  new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
+            Match matchNA = regURL.Match(resultString);
+            foreach (Match itemMatch in regURL.Matches(resultString))
+            {
+                resultString = resultString.Replace(itemMatch.ToString(), "<" + itemMatch.ToString() + ">");
+            }
+
+            return resultString;
         }
         
         public async Task ReloadSheetsAsync()
