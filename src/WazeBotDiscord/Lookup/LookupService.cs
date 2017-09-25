@@ -135,7 +135,70 @@ namespace WazeBotDiscord.Lookup
 
             return resultString;
         }
-        
+
+        /// <summary>
+        /// Adds a lookup sheet to the database for the server & channel the command is run in.  User just needs to specify the sheet ID which can be pulled from the Google Sheet URL
+        /// </summary>
+        /// <param name="guildID"></param>
+        /// <param name="channelID"></param>
+        /// <param name="sheetID"></param>
+        /// <returns>Returns true if it is a new add, false if there was an entry and we are modifying</returns>
+        public async Task<bool> AddSheetIDAsync(ulong guildID, ulong channelID, string sheetID)
+        {
+            var existing = GetExistingLookupSheet(channelID, guildID);
+            if (existing == null) { 
+                var dbSheet = new SheetToSearch
+                {
+                    GuildId = guildID,
+                    ChannelId = channelID,
+                    SheetId = sheetID
+                };
+
+                using (var db = new WbContext())
+                {
+                    db.SheetsToSearch.Add(dbSheet);
+                    await db.SaveChangesAsync();
+                }
+
+                _sheets.Add(dbSheet);
+                return true;
+            }
+
+            existing.GuildId = guildID;
+            existing.ChannelId = channelID;
+            existing.SheetId = sheetID;
+
+            using (var db = new WbContext())
+            {
+                db.SheetsToSearch.Update(existing);
+                await db.SaveChangesAsync();
+            }
+
+            return false;
+        }
+
+        public async Task<bool> RemoveSheetIDAsync(ulong guildID, ulong channelID)
+        {
+            var existing = GetExistingLookupSheet(channelID, guildID);
+            if (existing == null)
+                return false;
+
+            _sheets.Remove(existing);
+
+            using (var db = new WbContext())
+            {
+                db.SheetsToSearch.Remove(existing);
+                await db.SaveChangesAsync();
+            }
+
+            return true;
+        }
+
+        public SheetToSearch GetExistingLookupSheet(ulong channelId, ulong guildId)
+        {
+            return _sheets.Find(r => r.ChannelId == channelId && r.GuildId == guildId);
+        }
+
         public async Task ReloadSheetsAsync()
         {
             _sheets.Clear();
