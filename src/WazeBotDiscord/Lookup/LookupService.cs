@@ -47,8 +47,12 @@ namespace WazeBotDiscord.Lookup
                 return "This chanel is not configured to search a spreadsheet.";
 
             var parser = new HtmlParser();
-            var resp = await _client.GetAsync(
-                $"https://docs.google.com/spreadsheets/d/{sheet.SheetId}/pubhtml");
+            string sheetURL;
+            if (sheet.GId != "") //gid has been specified
+                sheetURL = $"https://docs.google.com/spreadsheets/d/{sheet.SheetId}/pubhtml?gid={sheet.GId}&single=true";
+            else
+                sheetURL = $"https://docs.google.com/spreadsheets/d/{sheet.SheetId}/pubhtml";
+            var resp = await _client.GetAsync(sheetURL);
 
             if (!resp.IsSuccessStatusCode)
                 return "Spreadsheet is not configured correctly.";
@@ -143,7 +147,7 @@ namespace WazeBotDiscord.Lookup
         /// <param name="channelID"></param>
         /// <param name="sheetID"></param>
         /// <returns>Returns true if it is a new add, false if there was an entry and we are modifying</returns>
-        public async Task<bool> AddSheetIDAsync(ulong guildID, ulong channelID, string sheetID)
+        public async Task<bool> AddSheetIDAsync(ulong guildID, ulong channelID, string sheetID, string gid = "")
         {
             var existing = GetExistingLookupSheet(channelID, guildID);
             if (existing == null) { 
@@ -151,7 +155,8 @@ namespace WazeBotDiscord.Lookup
                 {
                     GuildId = guildID,
                     ChannelId = channelID,
-                    SheetId = sheetID
+                    SheetId = sheetID,
+                    GId = gid
                 };
 
                 using (var db = new WbContext())
@@ -167,6 +172,7 @@ namespace WazeBotDiscord.Lookup
             existing.GuildId = guildID;
             existing.ChannelId = channelID;
             existing.SheetId = sheetID;
+            existing.GId = gid;
 
             using (var db = new WbContext())
             {

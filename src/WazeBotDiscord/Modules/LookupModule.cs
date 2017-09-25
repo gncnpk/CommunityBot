@@ -43,7 +43,21 @@ namespace WazeBotDiscord.Modules
                 await ReplyAsync($"{Context.Message.Author.Mention}: You must specify a sheet ID.");
                 return;
             }
-            var result = await _lookupSvc.AddSheetIDAsync(Context.Guild.Id, Context.Channel.Id, sheetID);
+            var sheetInfo = sheetID.Split(" ");
+            bool result;
+            if (sheetInfo.Length > 2)
+            {
+                await ReplyAsync("Incorrect paramaters specified.");
+                return;
+            }
+            else if (sheetInfo.Length == 2)
+            {
+                result = await _lookupSvc.AddSheetIDAsync(Context.Guild.Id, Context.Channel.Id, sheetInfo[0], sheetInfo[1]);
+            }
+            else
+                result = await _lookupSvc.AddSheetIDAsync(Context.Guild.Id, Context.Channel.Id, sheetID);
+
+
             var reply = $"{Context.Message.Author.Mention}: sheet added.";
             if(result == false)
                 reply = $"{Context.Message.Author.Mention}: sheet modified.";
