@@ -95,7 +95,7 @@ namespace WazeBotDiscord
             services = serviceCollection.BuildServiceProvider();
 
             client.MessageReceived += async (SocketMessage msg) =>
-                await AutoreplyHandler.HandleAutoreplyAsync(msg, autoreplyService);
+                await AutoreplyHandler.HandleAutoreplyAsync(msg, autoreplyService); //, client.Guilds);
 
             client.MessageReceived += async (SocketMessage msg) =>
                 await KeywordHandler.HandleKeywordAsync(msg, keywordService, client);
