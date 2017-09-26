@@ -12,7 +12,7 @@ using WazeBotDiscord.Glossary;
 using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
-using WazeBotDiscord.Tiles;
+using WazeBotDiscord.Scripts;
 
 namespace WazeBotDiscord
 {
@@ -67,6 +67,9 @@ namespace WazeBotDiscord
             var lookupService = new LookupService(httpClient);
             await lookupService.InitAsync();
 
+            var scriptsService = new ScriptsService(httpClient);
+            await scriptsService.InitAsync();
+
             //var tilesService = new TilesService(httpClient);
             //await tilesService.InitTilesServiceAsync();
 
@@ -77,6 +80,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(lookupService);
             serviceCollection.AddSingleton(glossaryService);
             serviceCollection.AddSingleton(httpClient);
+            serviceCollection.AddSingleton(scriptsService);
             //serviceCollection.AddSingleton(tilesService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");

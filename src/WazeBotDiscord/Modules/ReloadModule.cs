@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
+using WazeBotDiscord.Scripts;
 
 namespace WazeBotDiscord.Modules
 {
@@ -11,11 +12,13 @@ namespace WazeBotDiscord.Modules
     {
         readonly TwitterService _twitterSvc;
         readonly LookupService _lookupSvc;
+        readonly ScriptsService _scriptsSvc;
 
-        public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc)
+        public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc, ScriptsService scriptsSvc)
         {
             _twitterSvc = twitterSvc;
             _lookupSvc = lookupSvc;
+            _scriptsSvc = scriptsSvc;
         }
 
         [Command("twitter")]
