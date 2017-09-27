@@ -95,10 +95,10 @@ namespace WazeBotDiscord.Scripts
             {
                 return $"No results found for `{searchString}`.";
             }
-            else if (matchCount > 15)
+            else if (matchCount > 10)
             {
-                matchCount = 15;
-                result.Append($"Total of {matches.Count} results for `{searchString}`; only the top 15 are shown.\n");
+                matchCount = 10;
+                result.Append($"Total of {matches.Count} results for `{searchString}`; only the top 10 are shown.\n");
             }
             else
                 result.Append($"{matchCount} results found for `{searchString}`.\n");
@@ -116,7 +116,7 @@ namespace WazeBotDiscord.Scripts
                         result.Append(" | ");
                 }
                 if (matchCount > 0 && i != matchCount - 1)
-                    result.AppendLine(Environment.NewLine);
+                    result.AppendLine("\r\n");//(Environment.NewLine);
                 result.Remove(result.Length - 3, 3);
 
                 //result.AppendLine("```");
