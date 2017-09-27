@@ -21,13 +21,13 @@ namespace WazeBotDiscord.Scripts
             _client = client;
         }
 
-        public async Task InitAsync()
+        /*public async Task InitAsync()
         {
-            /*using (var db = new WbContext())
+            using (var db = new WbContext())
             {
                 _sheets = await db.SheetsToSearch.ToListAsync();
-            }*/
-        }
+            }
+        }*/
 
         public string GetChannelSheetUrl(ulong channelId)
         {
@@ -115,9 +115,9 @@ namespace WazeBotDiscord.Scripts
                         result.Append(matches[i][j]);
                         result.Append(" | ");
                 }
-                if (matchCount > 0 && i != matchCount - 1)
-                    result.AppendLine("\r\n");//(Environment.NewLine);
                 result.Remove(result.Length - 3, 3);
+                if (matchCount > 0 && i != matchCount - 1)
+                    result.AppendLine(Environment.NewLine);
 
                 //result.AppendLine("```");
             }
@@ -136,12 +136,5 @@ namespace WazeBotDiscord.Scripts
         {
             return _sheets.Find(r => r.ChannelId == channelId && r.GuildId == guildId);
         }*/
-
-        public async Task ReloadSheetsAsync()
-        {
-            //_sheets.Clear();
-
-            await InitAsync();
-        }
     }
 }

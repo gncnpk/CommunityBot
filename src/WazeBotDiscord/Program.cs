@@ -68,7 +68,7 @@ namespace WazeBotDiscord
             await lookupService.InitAsync();
 
             var scriptsService = new ScriptsService(httpClient);
-            await scriptsService.InitAsync();
+            //await scriptsService.InitAsync();
 
             //var tilesService = new TilesService(httpClient);
             //await tilesService.InitTilesServiceAsync();

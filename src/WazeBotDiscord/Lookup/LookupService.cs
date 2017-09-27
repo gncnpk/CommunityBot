@@ -123,9 +123,9 @@ namespace WazeBotDiscord.Lookup
                     result.Append(matches[i][j]);
                     result.Append(" | ");
                 }
+                result.Remove(result.Length - 3, 3);
                 if (matchCount > 0 && i != matchCount - 1)
                     result.AppendLine(Environment.NewLine);
-                result.Remove(result.Length - 3, 3);
 
                 //result.AppendLine("```");
             }
