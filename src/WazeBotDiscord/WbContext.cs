@@ -6,6 +6,7 @@ using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
+using WazeBotDiscord.Outreach;
 
 namespace WazeBotDiscord
 {
@@ -17,6 +18,7 @@ namespace WazeBotDiscord
         public DbSet<DbKeyword> Keywords { get; set; }
         public DbSet<DbUserMutedChannel> MutedChannels { get; set; }
         public DbSet<DbUserMutedGuild> MutedGuilds { get; set; }
+        public DbSet<OutreachSheetToSearch> OutreachSheetsToSearch { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -61,6 +63,18 @@ namespace WazeBotDiscord
                 e.Property(r => r.ChannelId).HasColumnName("channel_id");
                 e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
                 e.Property(r => r.SheetId).HasColumnName("sheet_id").IsRequired().HasMaxLength(100);
+                e.Property(r => r.GId).HasColumnName("Gid").IsRequired().HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<OutreachSheetToSearch>(e =>
+            {
+                e.ToTable("outreach_sheet_to_search");
+                e.HasKey(r => r.ChannelId);
+
+                e.Property(r => r.ChannelId).HasColumnName("channel_id");
+                e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
+                e.Property(r => r.SheetId).HasColumnName("sheet_id").IsRequired().HasMaxLength(100);
+                e.Property(r => r.GId).HasColumnName("Gid").IsRequired().HasMaxLength(20);
             });
 
             modelBuilder.Entity<DbKeyword>(e =>
