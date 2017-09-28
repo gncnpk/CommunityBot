@@ -169,7 +169,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>true if the keyword existed and was removed, or false if the user was not subscribed</returns>
         public async Task<bool> RemoveKeywordAsync(ulong userId, string keyword)
         {
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (!keyword.StartsWith("/") && !(keyword.EndsWith("/") || keyword.EndsWith("/s")))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);

@@ -26,7 +26,8 @@ namespace WazeBotDiscord.Keywords
                 reply.Append(" mentioned ");
                 reply.Append(m.MatchedKeywords.Count);
                 reply.Append(" of your keywords in ");
-                reply.Append(msg.Channel.Name);
+                reply.Append($"<#{msg.Channel.Id}>");
+                //reply.Append(msg.Channel.Name);
                 reply.Append(", ");
                 reply.Append(((SocketGuildChannel)msg.Channel).Guild.Name);
                 reply.Append(".\n\nMatched keyword");
