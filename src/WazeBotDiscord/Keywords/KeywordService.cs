@@ -39,7 +39,7 @@ namespace WazeBotDiscord.Keywords
             foreach (var k in keywords)
             {
                 Regex regexKeyword = null;
-                if (k.Keyword.StartsWith("/") && (k.Keyword.EndsWith("/") || k.Keyword.EndsWith("/s")))
+                if (CheckRegexKeyword(k.Keyword))
                     regexKeyword = CreateRegex(k.Keyword);
 
                 _keywords.Add(new KeywordRecord
@@ -131,14 +131,14 @@ namespace WazeBotDiscord.Keywords
         /// <returns>Tuple of the keyword and whether user was already subscribed</returns>
         public async Task<(KeywordRecord Keyword, bool AlreadyExisted)> AddKeywordAsync(ulong userId, string keyword)
         {
-            if (!keyword.StartsWith("/") || !(keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
             if (record != null)
                 return (record, true);
 
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (CheckRegexKeyword(keyword))
                 record = new KeywordRecord(userId, keyword, CreateRegex(keyword));
             else
                 record = new KeywordRecord(userId, keyword);
@@ -169,7 +169,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>true if the keyword existed and was removed, or false if the user was not subscribed</returns>
         public async Task<bool> RemoveKeywordAsync(ulong userId, string keyword)
         {
-            if (!keyword.StartsWith("/") && !(keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (!keyword.StartsWith("/") && !(keyword.EndsWith("/") || keyword.EndsWith("/i")))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -201,7 +201,7 @@ namespace WazeBotDiscord.Keywords
         /// it is already being ignored</returns>
         public async Task<IgnoreResult> IgnoreChannelsAsync(ulong userId, string keyword, params ulong[] channelIds)
         {
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -246,7 +246,7 @@ namespace WazeBotDiscord.Keywords
         /// it is already being ignored</returns>
         public async Task<IgnoreResult> IgnoreGuildsAsync(ulong userId, string keyword, params ulong[] guildIds)
         {
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -290,7 +290,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>True if success, false if the user isn't subscribed to the provided keyword</returns>
         public async Task<UnignoreResult> UnignoreChannelsAsync(ulong userId, string keyword, params ulong[] channelIds)
         {
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -329,7 +329,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>True if success, false if the user isn't subscribed to the provided keyword</returns>
         public async Task<UnignoreResult> UnignoreGuildsAsync(ulong userId, string keyword, params ulong[] guildIds)
         {
-            if (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/s")))
+            if (CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -492,7 +492,7 @@ namespace WazeBotDiscord.Keywords
         {
             bool IgnoreCase = keyword.EndsWith("/");
 
-            keyword = keyword.TrimEnd('s');
+            keyword = keyword.TrimEnd('i');
             keyword = keyword.Trim('/');
 
             RegexOptions regOptions = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline;
@@ -501,6 +501,11 @@ namespace WazeBotDiscord.Keywords
 
             return new Regex(keyword, regOptions, new TimeSpan(0, 0, 0, 0, 500));
 
+        }
+
+        Boolean CheckRegexKeyword(string keyword)
+        {
+            return (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/i")));
         }
     }
 
