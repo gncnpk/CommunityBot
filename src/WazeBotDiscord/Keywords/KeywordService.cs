@@ -494,11 +494,13 @@ namespace WazeBotDiscord.Keywords
 
             keyword = keyword.TrimEnd('s');
             keyword = keyword.Trim('/');
-            
-            if(IgnoreCase)
-                return new Regex(keyword, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Multiline, new TimeSpan(0, 0, 0, 0, 500));
-            else
-                return new Regex(keyword, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline, new TimeSpan(0, 0, 0, 0, 500));
+
+            RegexOptions regOptions = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline;
+            if (IgnoreCase)
+                regOptions |= RegexOptions.IgnoreCase;
+
+            return new Regex(keyword, regOptions, new TimeSpan(0, 0, 0, 0, 500));
+
         }
     }
 
