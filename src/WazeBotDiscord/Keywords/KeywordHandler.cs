@@ -22,6 +22,7 @@ namespace WazeBotDiscord.Keywords
 
                 var reply = new StringBuilder();
                 reply.Append(msg.Author.Username);
+                reply.Append($" ({((Discord.WebSocket.SocketGuildUser)msg.Author).Nickname})");
                 reply.Append(" mentioned ");
                 reply.Append(m.MatchedKeywords.Count);
                 reply.Append(" of your keywords in ");
