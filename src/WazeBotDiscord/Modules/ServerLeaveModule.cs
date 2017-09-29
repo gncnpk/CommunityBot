@@ -38,6 +38,9 @@ namespace WazeBotDiscord.Modules
                 return;
             }
 
+            if (channelID.StartsWith("<#") && channelID.EndsWith(">"))
+                channelID = channelID.TrimStart('<').TrimStart('#').TrimEnd('>');
+
             var result = await _serverLeaveSvc.AddChannelIDAsync(Context.Guild.Id, Convert.ToUInt64(channelID));
 
             var reply = $"{Context.Message.Author.Mention}: channel added.";
