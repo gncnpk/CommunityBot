@@ -27,7 +27,11 @@ namespace WazeBotDiscord.Keywords
         [Command("test")]
         public async Task Test([Remainder] string testString = null)
         {
-            var matches = _kwdSvc.CheckForKeyword(testString, Context.User.Id, Context.Guild.Id, Context.Message.Channel.Id).Find(m => m.UserId == Context.User.Id);
+            ulong guildID = 1; //bullshit a guildID so the CheckForKeyword doesn't fail when doing a muted/ignored guild lookup, if Context.Guild is not null, pull the real ID
+            if (Context.Guild != null)
+                guildID = Context.Guild.Id;
+
+            var matches = _kwdSvc.CheckForKeyword(testString, Context.User.Id, guildID, Context.Message.Channel.Id).Find(m => m.UserId == Context.User.Id);
 
             StringBuilder resultSB = new StringBuilder();
             
