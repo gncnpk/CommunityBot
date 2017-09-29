@@ -66,11 +66,11 @@ namespace WazeBotDiscord.Keywords
 
                 foreach (var k in keywords)
                 {
-                    reply.Append(k.Keyword);
                     reply.Append("\n");
+                    reply.Append(k.Keyword);
                 }
 
-                reply.Remove(reply.Length - 1, 1);
+                //reply.Remove(reply.Length - 1, 1);
                 reply.Append("```");
             }
 
