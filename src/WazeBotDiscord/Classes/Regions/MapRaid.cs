@@ -6,6 +6,7 @@
 
     public static class MapRaidRoles
     {
+        public const ulong Administrator = 361110624958152704;
         public const ulong CountryManager = 347412542626201601;
         public const ulong StateManager = 347412653221609484;
         public const ulong AreaManager = 347412734951817218;

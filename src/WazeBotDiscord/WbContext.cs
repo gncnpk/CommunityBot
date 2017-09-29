@@ -7,6 +7,7 @@ using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
 using WazeBotDiscord.Outreach;
+using WazeBotDiscord.ServerLeave;
 
 namespace WazeBotDiscord
 {
@@ -19,6 +20,7 @@ namespace WazeBotDiscord
         public DbSet<DbUserMutedChannel> MutedChannels { get; set; }
         public DbSet<DbUserMutedGuild> MutedGuilds { get; set; }
         public DbSet<OutreachSheetToSearch> OutreachSheetsToSearch { get; set; }
+        public DbSet<LeaveMessageChannel> LeaveMessageChannels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,6 +55,15 @@ namespace WazeBotDiscord
                 e.Property(t => t.FriendlyUsername).HasColumnName("friendly_username").IsRequired().HasMaxLength(45);
                 e.Property(t => t.DiscordGuildId).HasColumnName("discord_guild_id").IsRequired();
                 e.Property(t => t.DiscordChannelId).HasColumnName("discord_channel_id").IsRequired();
+            });
+
+            modelBuilder.Entity<LeaveMessageChannel>(e =>
+            {
+                e.ToTable("leave_message_channels");
+                e.HasKey(r => r.GuildId);
+
+                e.Property(r => r.ChannelId).HasColumnName("channel_id");
+                e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
             });
 
             modelBuilder.Entity<SheetToSearch>(e =>

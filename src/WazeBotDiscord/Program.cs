@@ -14,6 +14,7 @@ using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
 using WazeBotDiscord.Scripts;
 using WazeBotDiscord.Outreach;
+using WazeBotDiscord.ServerLeave;
 
 namespace WazeBotDiscord
 {
@@ -74,8 +75,9 @@ namespace WazeBotDiscord
             var scriptsService = new ScriptsService(httpClient);
             //await scriptsService.InitAsync();
 
-            //var tilesService = new TilesService(httpClient);
-            //await tilesService.InitTilesServiceAsync();
+            var serverLeaveService = new ServerLeaveService(httpClient);
+            await serverLeaveService.InitAutoreplyServiceAsync();
+
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -86,7 +88,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(httpClient);
             serviceCollection.AddSingleton(scriptsService);
             serviceCollection.AddSingleton(outreachService);
-            //serviceCollection.AddSingleton(tilesService);
+            serviceCollection.AddSingleton(serverLeaveService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
@@ -110,6 +112,7 @@ namespace WazeBotDiscord
                 await KeywordHandler.HandleKeywordAsync(msg, keywordService, client);
 
             client.UserJoined += async (SocketGuildUser user) => await UserJoinedRoleSyncEvent.SyncRoles(user, client);
+            client.UserLeft += async (SocketGuildUser user) => await UserLeftEvent.Alert(user, client, serverLeaveService);
 
             await InstallCommands();
 
