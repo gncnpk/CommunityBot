@@ -75,12 +75,12 @@ namespace WazeBotDiscord.Keywords
         /// <param name="guildId">ID of the guild the message was sent in</param>
         /// <param name="channelId">ID of the channel the message was sent in</param>
         /// <returns>List of matches</returns>
-        public List<KeywordMatch> CheckForKeyword(SocketMessage msg, ulong guildId, ulong channelId)
+        public List<KeywordMatch> CheckForKeyword(string msg, ulong AuthorID, ulong guildId, ulong channelId)
         {
-            var message = msg.Content.ToLowerInvariant();
+            var message = msg.ToLowerInvariant();
             var matches = new List<KeywordMatch>();
 
-            if (msg.Author.Id == 333960669839884290)
+            if (AuthorID == 333960669839884290)
                 message = _botMsg.Replace(message, "");
 
             foreach (var k in _keywords)
@@ -97,7 +97,7 @@ namespace WazeBotDiscord.Keywords
 
                 if (k.RegexKeyword != null)
                 {
-                    if (k.RegexKeyword?.IsMatch(message) == false && k.RegexKeyword?.IsMatch(msg.Content) == false)
+                    if (k.RegexKeyword?.IsMatch(message) == false && k.RegexKeyword?.IsMatch(msg) == false)
                         continue;
                 }
                 else if (!message.Contains(k.Keyword))
@@ -490,7 +490,7 @@ namespace WazeBotDiscord.Keywords
 
         Regex CreateRegex(string keyword)
         {
-            bool IgnoreCase = keyword.EndsWith("/");
+            bool IgnoreCase = keyword.EndsWith("/i");
 
             keyword = keyword.TrimEnd('i');
             keyword = keyword.Trim('/');

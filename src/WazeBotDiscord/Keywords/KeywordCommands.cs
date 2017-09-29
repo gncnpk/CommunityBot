@@ -24,6 +24,29 @@ namespace WazeBotDiscord.Keywords
             await ReplyAsync($"{Context.Message.Author.Mention}: For help with this command, see the Wazeopedia page: {_helpLink}");
         }
 
+        [Command("test")]
+        public async Task Test([Remainder] string testString = null)
+        {
+            var matches = _kwdSvc.CheckForKeyword(testString, Context.User.Id, Context.Guild.Id, Context.Message.Channel.Id).Find(m => m.UserId == Context.User.Id);
+
+            StringBuilder resultSB = new StringBuilder();
+            
+            if (matches != null)
+            {
+                for (var i = 0; i < matches.MatchedKeywords.Count; i++)
+                {
+                    if (i > 0)
+                        resultSB.Append(", ");
+                    resultSB.Append($"`{matches.MatchedKeywords[i]}`");
+
+                }
+            }
+            if (resultSB.Length > 0)
+                await ReplyAsync("Matched keyword(s) " + resultSB.ToString());
+            else
+                await ReplyAsync("No matches found.");
+        }
+
         [Command("list")]
         public async Task List([Remainder]string unused = null)
         {
