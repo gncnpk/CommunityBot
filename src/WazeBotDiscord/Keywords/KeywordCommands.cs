@@ -195,9 +195,11 @@ namespace WazeBotDiscord.Keywords
             {
                 //We want channelId as a string so people can directly reference a channel with #, then we strip out the reference data
                 //A hell of a lot easier than having to pull the channel ID...
-                ulong channelID = Convert.ToUInt64(channelId);
+                ulong channelID;
                 if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
                     channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
 
                 var rawChannel = await Context.Client.GetChannelAsync(channelID);
                 if (rawChannel == null)
@@ -282,9 +284,11 @@ namespace WazeBotDiscord.Keywords
             [Command("channel")]
             public async Task UnignoreChannel(string channelId, [Remainder]string keyword = null)
             {
-                ulong channelID = Convert.ToUInt64(channelId);
+                ulong channelID;
                 if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
                     channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
 
                 if (keyword == null)
                 {
@@ -345,9 +349,11 @@ namespace WazeBotDiscord.Keywords
             [Command("channel")]
             public async Task MuteChannel(string channelId)
             {
-                ulong channelID = Convert.ToUInt64(channelId);
+                ulong channelID;
                 if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
                     channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
                 var channel = await Context.Client.GetChannelAsync(channelID);
                 if (channel == null)
                 {
@@ -392,9 +398,11 @@ namespace WazeBotDiscord.Keywords
             [Command("channel")]
             public async Task UnmuteChannel(string channelId)
             {
-                ulong channelID = Convert.ToUInt64(channelId);
+                ulong channelID;
                 if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
                     channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
                 var channel = await Context.Client.GetChannelAsync(channelID);
                 if (channel == null)
                 {
