@@ -35,7 +35,12 @@ namespace WazeBotDiscord.Outreach
             if (sheet == null)
                 return "This chanel is not configured to search a spreadsheet.";
 
-            return $"<https://docs.google.com/spreadsheets/d/{sheet.SheetId}/edit>";
+            string sheetURL = "";
+            if (sheet.GId != "") //gid has been specified
+                sheetURL = $"https://docs.google.com/spreadsheets/d/{sheet.SheetId}/pubhtml?gid={sheet.GId}&single=true";
+            else
+                sheetURL = $"https://docs.google.com/spreadsheets/d/{sheet.SheetId}/pubhtml";
+            return sheetURL;
         }
 
         public async Task<string> SearchSheetAsync(ulong channelId, string origSearchString)

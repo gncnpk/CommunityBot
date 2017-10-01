@@ -20,7 +20,8 @@ namespace WazeBotDiscord.Classes.Roles
             [347386780074377217] = 347412734951817218, // Map Raid, this is the AM role ID
             [360595895965843456] = 360597161655795732, // Community Test Server
             [359327158944137227] = 360619332323115009, // JustinTest server
-            [356076662812573698] = 363009435452440577  // VEOC AM role ID
+            [356076662812573698] = 363009435452440577, // VEOC AM role ID
+            [352258352417603587] = 352276470951051274  // Territories AM role ID
         };
     }
 }
