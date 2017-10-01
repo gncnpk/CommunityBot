@@ -11,7 +11,7 @@ namespace WazeBotDiscord.Keywords
     public class KeywordModule : ModuleBase
     {
         readonly KeywordService _kwdSvc;
-        readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/User:TerryPurdue/CommunityBot#Keyword_Subscriptions>";
+        readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
         public KeywordModule(KeywordService kwdSvc)
         {
@@ -145,7 +145,7 @@ namespace WazeBotDiscord.Keywords
         public class IgnoreKeywordModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/User:TerryPurdue/CommunityBot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public IgnoreKeywordModule(KeywordService kwdSvc)
             {
@@ -243,7 +243,7 @@ namespace WazeBotDiscord.Keywords
         public class UnignoreKeywordModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/User:TerryPurdue/CommunityBot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public UnignoreKeywordModule(KeywordService kwdSvc)
             {
@@ -323,7 +323,7 @@ namespace WazeBotDiscord.Keywords
         public class MuteKeywordsModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/User:TerryPurdue/CommunityBot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public MuteKeywordsModule(KeywordService kwdSvc)
             {
@@ -372,7 +372,7 @@ namespace WazeBotDiscord.Keywords
         public class UnmuteKeywordsModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/User:TerryPurdue/CommunityBot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public UnmuteKeywordsModule(KeywordService kwdSvc)
             {
