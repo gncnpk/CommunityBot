@@ -98,9 +98,9 @@ namespace WazeBotDiscord.Keywords
                 return;
             }
 
-            if (keyword.Length > 40)
+            if (keyword.Length > 100)
             {
-                await ReplyAsync($"{Context.Message.Author.Mention}: Your keyword cannot be longer than 40 characters.");
+                await ReplyAsync($"{Context.Message.Author.Mention}: Your keyword cannot be longer than 100 characters.");
                 return;
             }
 
