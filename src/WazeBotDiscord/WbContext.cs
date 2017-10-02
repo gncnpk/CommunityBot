@@ -6,6 +6,8 @@ using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
+using WazeBotDiscord.Outreach;
+using WazeBotDiscord.ServerLeave;
 
 namespace WazeBotDiscord
 {
@@ -17,6 +19,8 @@ namespace WazeBotDiscord
         public DbSet<DbKeyword> Keywords { get; set; }
         public DbSet<DbUserMutedChannel> MutedChannels { get; set; }
         public DbSet<DbUserMutedGuild> MutedGuilds { get; set; }
+        public DbSet<OutreachSheetToSearch> OutreachSheetsToSearch { get; set; }
+        public DbSet<LeaveMessageChannel> LeaveMessageChannels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,6 +57,15 @@ namespace WazeBotDiscord
                 e.Property(t => t.DiscordChannelId).HasColumnName("discord_channel_id").IsRequired();
             });
 
+            modelBuilder.Entity<LeaveMessageChannel>(e =>
+            {
+                e.ToTable("leave_message_channels");
+                e.HasKey(r => r.GuildId);
+
+                e.Property(r => r.ChannelId).HasColumnName("channel_id");
+                e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
+            });
+
             modelBuilder.Entity<SheetToSearch>(e =>
             {
                 e.ToTable("sheet_to_search");
@@ -61,15 +74,27 @@ namespace WazeBotDiscord
                 e.Property(r => r.ChannelId).HasColumnName("channel_id");
                 e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
                 e.Property(r => r.SheetId).HasColumnName("sheet_id").IsRequired().HasMaxLength(100);
+                e.Property(r => r.GId).HasColumnName("Gid").IsRequired().HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<OutreachSheetToSearch>(e =>
+            {
+                e.ToTable("outreach_sheet_to_search");
+                e.HasKey(r => r.ChannelId);
+
+                e.Property(r => r.ChannelId).HasColumnName("channel_id");
+                e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
+                e.Property(r => r.SheetId).HasColumnName("sheet_id").IsRequired().HasMaxLength(100);
+                e.Property(r => r.GId).HasColumnName("Gid").IsRequired().HasMaxLength(20);
             });
 
             modelBuilder.Entity<DbKeyword>(e =>
             {
-                e.ToTable("keyword_record");
+                e.ToTable("keyword");
                 e.HasKey(r => r.Id);
 
                 e.Property(r => r.UserId).HasColumnName("user_id").IsRequired();
-                e.Property(r => r.Keyword).HasColumnName("keyword").IsRequired().HasMaxLength(60);
+                e.Property(r => r.Keyword).HasColumnName("keyword").IsRequired().HasMaxLength(100);
 
                 e.HasMany(r => r.IgnoredChannels)
                     .WithOne(s => s.Keyword)

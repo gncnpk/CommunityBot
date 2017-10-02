@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace WazeBotDiscord.Keywords
     public class KeywordModule : ModuleBase
     {
         readonly KeywordService _kwdSvc;
-        readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/Wazebot#Keyword_Subscriptions>";
+        readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
         public KeywordModule(KeywordService kwdSvc)
         {
@@ -22,6 +23,33 @@ namespace WazeBotDiscord.Keywords
         public async Task Help()
         {
             await ReplyAsync($"{Context.Message.Author.Mention}: For help with this command, see the Wazeopedia page: {_helpLink}");
+        }
+
+        [Command("test")]
+        public async Task Test([Remainder] string testString = null)
+        {
+            ulong guildID = 1; //bullshit a guildID so the CheckForKeyword doesn't fail when doing a muted/ignored guild lookup, if Context.Guild is not null, pull the real ID
+            if (Context.Guild != null)
+                guildID = Context.Guild.Id;
+
+            var matches = _kwdSvc.CheckForKeyword(testString, Context.User.Id, guildID, Context.Message.Channel.Id).Find(m => m.UserId == Context.User.Id);
+
+            StringBuilder resultSB = new StringBuilder();
+            
+            if (matches != null)
+            {
+                for (var i = 0; i < matches.MatchedKeywords.Count; i++)
+                {
+                    if (i > 0)
+                        resultSB.Append(", ");
+                    resultSB.Append($"`{matches.MatchedKeywords[i]}`");
+
+                }
+            }
+            if (resultSB.Length > 0)
+                await ReplyAsync("Matched keyword(s) " + resultSB.ToString());
+            else
+                await ReplyAsync("No matches found.");
         }
 
         [Command("list")]
@@ -43,11 +71,11 @@ namespace WazeBotDiscord.Keywords
 
                 foreach (var k in keywords)
                 {
-                    reply.Append(k.Keyword);
                     reply.Append("\n");
+                    reply.Append(k.Keyword);
                 }
 
-                reply.Remove(reply.Length - 1, 1);
+                //reply.Remove(reply.Length - 1, 1);
                 reply.Append("```");
             }
 
@@ -70,9 +98,9 @@ namespace WazeBotDiscord.Keywords
                 return;
             }
 
-            if (keyword.Length > 60)
+            if (keyword.Length > 100)
             {
-                await ReplyAsync($"{Context.Message.Author.Mention}: Your keyword cannot be longer than 60 characters.");
+                await ReplyAsync($"{Context.Message.Author.Mention}: Your keyword cannot be longer than 100 characters.");
                 return;
             }
 
@@ -117,7 +145,7 @@ namespace WazeBotDiscord.Keywords
         public class IgnoreKeywordModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/Wazebot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public IgnoreKeywordModule(KeywordService kwdSvc)
             {
@@ -163,9 +191,17 @@ namespace WazeBotDiscord.Keywords
             }
 
             [Command("channel")]
-            public async Task IgnoreChannel(ulong channelId, [Remainder]string keyword = null)
+            public async Task IgnoreChannel(string channelId, [Remainder]string keyword = null)
             {
-                var rawChannel = await Context.Client.GetChannelAsync(channelId);
+                //We want channelId as a string so people can directly reference a channel with #, then we strip out the reference data
+                //A hell of a lot easier than having to pull the channel ID...
+                ulong channelID;
+                if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
+                    channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
+
+                var rawChannel = await Context.Client.GetChannelAsync(channelID);
                 if (rawChannel == null)
                 {
                     await ReplyAsync($"{Context.Message.Author.Mention}: " +
@@ -182,7 +218,7 @@ namespace WazeBotDiscord.Keywords
 
                 var channel = rawChannel as SocketTextChannel;
 
-                switch (await _kwdSvc.IgnoreChannelsAsync(Context.Message.Author.Id, keyword, channelId))
+                switch (await _kwdSvc.IgnoreChannelsAsync(Context.Message.Author.Id, keyword, channelID))
                 {
                     case IgnoreResult.Success:
                         await ReplyAsync($"{Context.Message.Author.Mention}: " +
@@ -207,7 +243,7 @@ namespace WazeBotDiscord.Keywords
         public class UnignoreKeywordModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/Wazebot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public UnignoreKeywordModule(KeywordService kwdSvc)
             {
@@ -246,8 +282,14 @@ namespace WazeBotDiscord.Keywords
             }
 
             [Command("channel")]
-            public async Task UnignoreChannel(ulong channelId, [Remainder]string keyword = null)
+            public async Task UnignoreChannel(string channelId, [Remainder]string keyword = null)
             {
+                ulong channelID;
+                if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
+                    channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
+
                 if (keyword == null)
                 {
                     await ReplyAsync($"{Context.Message.Author.Mention}: " +
@@ -255,10 +297,10 @@ namespace WazeBotDiscord.Keywords
                     return;
                 }
 
-                switch (await _kwdSvc.UnignoreChannelsAsync(Context.Message.Author.Id, keyword, channelId))
+                switch (await _kwdSvc.UnignoreChannelsAsync(Context.Message.Author.Id, keyword, channelID))
                 {
                     case UnignoreResult.Success:
-                        var channel = (await Context.Client.GetChannelAsync(channelId)) as SocketTextChannel;
+                        var channel = (await Context.Client.GetChannelAsync(channelID)) as SocketTextChannel;
                         await ReplyAsync($"{Context.Message.Author.Mention}: " +
                             $"Unignored keyword `{keyword}` in channel {channel.Mention} (server {channel.Guild.Name}).");
                         break;
@@ -281,7 +323,7 @@ namespace WazeBotDiscord.Keywords
         public class MuteKeywordsModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/Wazebot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public MuteKeywordsModule(KeywordService kwdSvc)
             {
@@ -305,9 +347,14 @@ namespace WazeBotDiscord.Keywords
             }
 
             [Command("channel")]
-            public async Task MuteChannel(ulong channelId)
+            public async Task MuteChannel(string channelId)
             {
-                var channel = await Context.Client.GetChannelAsync(channelId);
+                ulong channelID;
+                if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
+                    channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
+                var channel = await Context.Client.GetChannelAsync(channelID);
                 if (channel == null)
                 {
                     await ReplyAsync($"{Context.Message.Author.Mention}: " +
@@ -315,7 +362,7 @@ namespace WazeBotDiscord.Keywords
                     return;
                 }
 
-                await _kwdSvc.MuteChannelAsync(Context.Message.Author.Id, channelId);
+                await _kwdSvc.MuteChannelAsync(Context.Message.Author.Id, channelID);
                 await ReplyAsync($"{Context.Message.Author.Mention}: Muted {channel.Name}.");
             }
         }
@@ -325,7 +372,7 @@ namespace WazeBotDiscord.Keywords
         public class UnmuteKeywordsModule : ModuleBase
         {
             readonly KeywordService _kwdSvc;
-            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/Wazebot#Keyword_Subscriptions>";
+            readonly string _helpLink = "<https://wazeopedia.waze.com/wiki/USA/CommunityBot#Keyword_Subscriptions>";
 
             public UnmuteKeywordsModule(KeywordService kwdSvc)
             {
@@ -349,9 +396,14 @@ namespace WazeBotDiscord.Keywords
             }
 
             [Command("channel")]
-            public async Task UnmuteChannel(ulong channelId)
+            public async Task UnmuteChannel(string channelId)
             {
-                var channel = await Context.Client.GetChannelAsync(channelId);
+                ulong channelID;
+                if (channelId.StartsWith("<#") && channelId.EndsWith(">"))
+                    channelID = Convert.ToUInt64(channelId.TrimStart('<').TrimStart('#').TrimEnd('>'));
+                else
+                    channelID = Convert.ToUInt64(channelId);
+                var channel = await Context.Client.GetChannelAsync(channelID);
                 if (channel == null)
                 {
                     await ReplyAsync($"{Context.Message.Author.Mention}: " +
@@ -359,7 +411,7 @@ namespace WazeBotDiscord.Keywords
                     return;
                 }
 
-                await _kwdSvc.UnmuteChannelAsync(Context.Message.Author.Id, channelId);
+                await _kwdSvc.UnmuteChannelAsync(Context.Message.Author.Id, channelID);
                 await ReplyAsync($"{Context.Message.Author.Mention}: Unmuted {channel.Name}.");
             }
         }

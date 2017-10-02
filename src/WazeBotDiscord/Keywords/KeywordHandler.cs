@@ -14,19 +14,22 @@ namespace WazeBotDiscord.Keywords
 
             var channel = msg.Channel as SocketTextChannel;
 
-            foreach (var m in service.CheckForKeyword(msg, channel.Guild.Id, channel.Id))
+            foreach (var m in service.CheckForKeyword(msg.Content, msg.Author.Id, channel.Guild.Id, channel.Id))
             {
                 if (msg.Author.Id == m.UserId
                     || !channel.Users.Any(u => u.Id == m.UserId))
                     continue;
 
+                string nickname = ((Discord.WebSocket.SocketGuildUser)msg.Author).Nickname;
                 var reply = new StringBuilder();
                 reply.Append(msg.Author.Username);
+                if(nickname != null)
+                    reply.Append($" ({nickname})");
                 reply.Append(" mentioned ");
                 reply.Append(m.MatchedKeywords.Count);
                 reply.Append(" of your keywords in ");
-                reply.Append(msg.Channel.Name);
-                reply.Append(", ");
+                reply.Append($"<#{msg.Channel.Id}>");
+                reply.Append(" on ");
                 reply.Append(((SocketGuildChannel)msg.Channel).Guild.Name);
                 reply.Append(".\n\nMatched keyword");
                 if (m.MatchedKeywords.Count > 1)

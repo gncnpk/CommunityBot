@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +12,9 @@ using WazeBotDiscord.Glossary;
 using WazeBotDiscord.Keywords;
 using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
+using WazeBotDiscord.Scripts;
+using WazeBotDiscord.Outreach;
+using WazeBotDiscord.ServerLeave;
 
 namespace WazeBotDiscord
 {
@@ -66,6 +69,16 @@ namespace WazeBotDiscord
             var lookupService = new LookupService(httpClient);
             await lookupService.InitAsync();
 
+            var outreachService = new OutreachService(httpClient);
+            await outreachService.InitAsync();
+
+            var scriptsService = new ScriptsService(httpClient);
+            //await scriptsService.InitAsync();
+
+            var serverLeaveService = new ServerLeaveService(httpClient);
+            await serverLeaveService.InitAutoreplyServiceAsync();
+
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(autoreplyService);
@@ -73,8 +86,11 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(lookupService);
             serviceCollection.AddSingleton(glossaryService);
             serviceCollection.AddSingleton(httpClient);
+            serviceCollection.AddSingleton(scriptsService);
+            serviceCollection.AddSingleton(outreachService);
+            serviceCollection.AddSingleton(serverLeaveService);
 
-            client.Ready += async () => await client.SetGameAsync("with junction boxes");
+            //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
             var twitterService = new TwitterService(client);
             serviceCollection.AddSingleton(twitterService);
@@ -90,12 +106,13 @@ namespace WazeBotDiscord
             services = serviceCollection.BuildServiceProvider();
 
             client.MessageReceived += async (SocketMessage msg) =>
-                await AutoreplyHandler.HandleAutoreplyAsync(msg, autoreplyService);
+                await AutoreplyHandler.HandleAutoreplyAsync(msg, autoreplyService); //, client.Guilds);
 
             client.MessageReceived += async (SocketMessage msg) =>
                 await KeywordHandler.HandleKeywordAsync(msg, keywordService, client);
 
             client.UserJoined += async (SocketGuildUser user) => await UserJoinedRoleSyncEvent.SyncRoles(user, client);
+            client.UserLeft += async (SocketGuildUser user) => await UserLeftEvent.Alert(user, client, serverLeaveService);
 
             await InstallCommands();
 
@@ -138,6 +155,7 @@ namespace WazeBotDiscord
             {
                 await context.Channel.SendMessageAsync($"{context.Message.Author.Mention}: You didn't specify the right " +
                     "parameters. If you're using a role command, you probably forgot to specify the user.");
+                await context.Channel.SendMessageAsync(result.ErrorReason);
             }
         }
 
@@ -151,7 +169,7 @@ namespace WazeBotDiscord
         {
             if (Environment.GetEnvironmentVariable("WAZEBOT_DB_CONNECTIONSTRING") == null)
                 throw new ArgumentNullException("DB connection string env var not found", innerException: null);
-
+            /*
             if (Environment.GetEnvironmentVariable("TWITTER_CONSUMER_KEY") == null)
                 throw new ArgumentNullException("Twitter consumer key env var not found", innerException: null);
 
@@ -162,7 +180,7 @@ namespace WazeBotDiscord
                 throw new ArgumentNullException("Twitter access token env var not found", innerException: null);
 
             if (Environment.GetEnvironmentVariable("TWITTER_ACCESS_TOKEN_SECRET") == null)
-                throw new ArgumentNullException("Twitter access token secret env var not found", innerException: null);
+                throw new ArgumentNullException("Twitter access token secret env var not found", innerException: null);*/
         }
     }
 }

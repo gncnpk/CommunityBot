@@ -39,7 +39,7 @@ namespace WazeBotDiscord.Keywords
             foreach (var k in keywords)
             {
                 Regex regexKeyword = null;
-                if (IsKeywordRegex(k.Keyword))
+                if (CheckRegexKeyword(k.Keyword))
                     regexKeyword = CreateRegex(k.Keyword);
 
                 _keywords.Add(new KeywordRecord
@@ -75,16 +75,13 @@ namespace WazeBotDiscord.Keywords
         /// <param name="guildId">ID of the guild the message was sent in</param>
         /// <param name="channelId">ID of the channel the message was sent in</param>
         /// <returns>List of matches</returns>
-        public List<KeywordMatch> CheckForKeyword(SocketMessage msg, ulong guildId, ulong channelId)
+        public List<KeywordMatch> CheckForKeyword(string msg, ulong AuthorID, ulong guildId, ulong channelId)
         {
-            var message = msg.Content;
-
-            // prevents names from triggering keywords in the GHO sync bot messages
-            if (msg.Author.Id == 333960669839884290)
-                message = _botMsg.Replace(message, "");
-
-            var lowercaseMessage = message.ToLowerInvariant();
+            var message = msg.ToLowerInvariant();
             var matches = new List<KeywordMatch>();
+
+            if (AuthorID == 333960669839884290)
+                message = _botMsg.Replace(message, "");
 
             foreach (var k in _keywords)
             {
@@ -100,13 +97,11 @@ namespace WazeBotDiscord.Keywords
 
                 if (k.RegexKeyword != null)
                 {
-                    if (k.RegexKeyword?.IsMatch(message) == false)
+                    if (k.RegexKeyword?.IsMatch(message) == false && k.RegexKeyword?.IsMatch(msg) == false)
                         continue;
                 }
-                else if (!lowercaseMessage.Contains(k.Keyword))
-                {
+                else if (!message.Contains(k.Keyword))
                     continue;
-                }
 
                 var existingMatch = matches.Find(m => m.UserId == k.UserId);
                 if (existingMatch != null)
@@ -136,15 +131,14 @@ namespace WazeBotDiscord.Keywords
         /// <returns>Tuple of the keyword and whether user was already subscribed</returns>
         public async Task<(KeywordRecord Keyword, bool AlreadyExisted)> AddKeywordAsync(ulong userId, string keyword)
         {
-            var isKeywordRegex = IsKeywordRegex(keyword);
-            if (!isKeywordRegex)
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
             if (record != null)
                 return (record, true);
 
-            if (isKeywordRegex)
+            if (CheckRegexKeyword(keyword))
                 record = new KeywordRecord(userId, keyword, CreateRegex(keyword));
             else
                 record = new KeywordRecord(userId, keyword);
@@ -175,7 +169,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>true if the keyword existed and was removed, or false if the user was not subscribed</returns>
         public async Task<bool> RemoveKeywordAsync(ulong userId, string keyword)
         {
-            if (!IsKeywordRegex(keyword))
+            if (!keyword.StartsWith("/") && !(keyword.EndsWith("/") || keyword.EndsWith("/i")))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -203,11 +197,11 @@ namespace WazeBotDiscord.Keywords
         /// <param name="userId">ID of the user to add the ignores to</param>
         /// <param name="keyword">Keyword that is being ignored</param>
         /// <param name="channelIds">Channel IDs that are being ignored</param>
-        /// <returns>True if success, false if the user isn't subscribed to the provided keyword or
+        /// <returns>True if success, false if the user isn't subscribed to the provided keyword or 
         /// it is already being ignored</returns>
         public async Task<IgnoreResult> IgnoreChannelsAsync(ulong userId, string keyword, params ulong[] channelIds)
         {
-            if (!IsKeywordRegex(keyword))
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -248,11 +242,11 @@ namespace WazeBotDiscord.Keywords
         /// <param name="userId">ID of the user to add the ignores to</param>
         /// <param name="keyword">Keyword that is being ignored</param>
         /// <param name="guildIds">Guild IDs that are being ignored</param>
-        /// <returns>True if success, false if the user isn't subscribed to the provided keyword or
+        /// <returns>True if success, false if the user isn't subscribed to the provided keyword or 
         /// it is already being ignored</returns>
         public async Task<IgnoreResult> IgnoreGuildsAsync(ulong userId, string keyword, params ulong[] guildIds)
         {
-            if (!IsKeywordRegex(keyword))
+            if (!CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -296,7 +290,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>True if success, false if the user isn't subscribed to the provided keyword</returns>
         public async Task<UnignoreResult> UnignoreChannelsAsync(ulong userId, string keyword, params ulong[] channelIds)
         {
-            if (!IsKeywordRegex(keyword))
+            if (CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -335,7 +329,7 @@ namespace WazeBotDiscord.Keywords
         /// <returns>True if success, false if the user isn't subscribed to the provided keyword</returns>
         public async Task<UnignoreResult> UnignoreGuildsAsync(ulong userId, string keyword, params ulong[] guildIds)
         {
-            if (!IsKeywordRegex(keyword))
+            if (CheckRegexKeyword(keyword))
                 keyword = keyword.ToLowerInvariant();
 
             var record = GetRecord(userId, keyword);
@@ -494,30 +488,24 @@ namespace WazeBotDiscord.Keywords
             return _keywords.Find(k => k.UserId == userId && k.Keyword == keyword);
         }
 
-        /// <summary>
-        /// Indicates if regex is being used for keyword
-        /// </summary>
-        /// <param name="keyword">The keyword for the record</param>
-        /// <returns>Boolean of if it's a regex format or not</returns>
-        bool IsKeywordRegex(string keyword)
-        {
-            return keyword.StartsWith('/') && (keyword.EndsWith('/') || keyword.EndsWith("/i"));
-        }
-
         Regex CreateRegex(string keyword)
         {
-            var options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline;
-            if (keyword.EndsWith("/i"))
-            {
-                options |= RegexOptions.IgnoreCase;
-                keyword = keyword.Substring(1, keyword.Length - 3);
-            }
-            else
-            {
-                keyword = keyword.Trim('/');
-            }
+            bool IgnoreCase = keyword.EndsWith("/i");
 
-            return new Regex(keyword, options, new TimeSpan(0, 0, 0, 0, 500));
+            keyword = keyword.TrimEnd('i');
+            keyword = keyword.Trim('/');
+
+            RegexOptions regOptions = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline;
+            if (IgnoreCase)
+                regOptions |= RegexOptions.IgnoreCase;
+
+            return new Regex(keyword, regOptions, new TimeSpan(0, 0, 0, 0, 500));
+
+        }
+
+        Boolean CheckRegexKeyword(string keyword)
+        {
+            return (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/i")));
         }
     }
 

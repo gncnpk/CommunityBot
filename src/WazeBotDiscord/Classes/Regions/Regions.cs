@@ -13,5 +13,6 @@
         public const ulong NewEngland = 300482201198395417;
         public const ulong Northeast = 300481818619150336;
         public const ulong MidAtlantic = 299676784327393281;
+        public const ulong CommunityTest = 360595895965843456;
     }
 }

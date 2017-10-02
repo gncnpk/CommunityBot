@@ -50,7 +50,7 @@ namespace WazeBotDiscord.Modules
 
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
 
-            var result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, StateManager.Ids, Context);
+             var result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, StateManager.Ids, Context);
 
             if (result == SyncedRoleStatus.Added)
             {

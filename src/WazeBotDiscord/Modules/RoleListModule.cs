@@ -3,11 +3,12 @@ using Discord.Commands;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WazeBotDiscord.Utilities;
 
 namespace WazeBotDiscord.Modules
 {
     [Group("roles")]
-    [RequireOwner]
+    [RequireAdmin]
     public class RoleListModule : ModuleBase
     {
         [Command]
