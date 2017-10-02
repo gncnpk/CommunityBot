@@ -49,12 +49,13 @@ namespace WazeBotDiscord.Modules
 
             //var embed = CreateEmbed(pr);
             StringBuilder sr = new StringBuilder();
-            sr.AppendLine("Profiles for " + pr.EditorName);
-            sr.AppendLine("**Editor Profile**");
+            
+            sr.AppendLine($":bust_in_silhouette: **{pr.EditorName}**");
+            sr.AppendLine("_Editor Profile_");
             sr.AppendLine(pr.EditorProfile);
-            sr.AppendLine("**Forum Profile**");
+            sr.AppendLine("_Forum Profile_");
             sr.AppendLine(pr.ForumProfile);
-            sr.AppendLine("**Wiki Profile**");
+            sr.AppendLine("_Wiki Profile_");
             sr.AppendLine(pr.WikiProfile);
             await ReplyAsync(sr.ToString());
             //await ReplyAsync("", embed: embed);
@@ -83,6 +84,16 @@ namespace WazeBotDiscord.Modules
 
         Embed CreateEmbed(ProfileResult item)
         {
+            var users = Context.Guild.GetUsersAsync(CacheMode.AllowDownload);
+            string avatarURL = "";
+            foreach (var u in users.Result)
+            {
+                if (u.Username.ToLower().StartsWith(item.EditorName.ToLower()))
+                {
+                    avatarURL = u.GetAvatarUrl();
+                    break;
+                }
+            }
             StringBuilder sr = new StringBuilder();
             sr.AppendLine("**Editor Profile**");
             sr.AppendLine(item.EditorProfile);
@@ -94,7 +105,8 @@ namespace WazeBotDiscord.Modules
             {
                 Color = new Color(147, 196, 211),
                 Title = "Profiles for " + item.EditorName,
-                Description = sr.ToString()
+                Description = sr.ToString(),
+                ThumbnailUrl = avatarURL
 
                 /*Footer = new EmbedFooterBuilder
                 {
