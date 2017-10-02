@@ -1,1 +1,3 @@
-This repository is no longer in use, the Waze community decided to fork it [here](https://gitlab.com/SixbucksSolutions/CommunityBot). (By fork I mean "clone it and delete the history", but that's just semantics.)
+CommnityBot is a fork of vaindil's [wazebot-discord](https://github.com/vaindil/wazebot-discord) effort. 
+
+Documentation can be found on the [CommunityBot Wazeopedia page](https://wazeopedia.waze.com/wiki/USA/CommunityBot).
