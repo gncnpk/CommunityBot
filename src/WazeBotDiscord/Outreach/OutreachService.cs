@@ -118,8 +118,6 @@ namespace WazeBotDiscord.Outreach
 
             for (var i = 0; i < matchCount; i++)
             {
-                //result.AppendLine("```");
-
                 for (var j = 0; j < matches[i].Count; j++)
                 {
                     if (string.IsNullOrWhiteSpace(matches[i][j]))
@@ -131,8 +129,6 @@ namespace WazeBotDiscord.Outreach
                 result.Remove(result.Length - 3, 3);
                 if (matchCount > 0 && i != matchCount - 1)
                     result.AppendLine(Environment.NewLine);
-
-                //result.AppendLine("```");
             }
             string resultString = result.ToString();
             Regex regURL = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
