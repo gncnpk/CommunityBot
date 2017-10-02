@@ -80,7 +80,7 @@ namespace WazeBotDiscord.Keywords
             var message = msg.ToLowerInvariant();
             var matches = new List<KeywordMatch>();
 
-            if (AuthorID == 333960669839884290)
+            if (AuthorID == 333960669839884290 || AuthorID == 364230218145333259) //Ignore the author name in sync bot messages
                 message = _botMsg.Replace(message, "");
 
             foreach (var k in _keywords)
