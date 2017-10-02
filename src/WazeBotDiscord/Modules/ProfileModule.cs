@@ -39,12 +39,25 @@ namespace WazeBotDiscord.Modules
             wikiProfile = await CheckProfile(wikiProfile, "wiki");
             ProfileResult pr = new ProfileResult();
             pr.EditorName = editorName;
-            pr.EditorProfile = editorProfile;
+            pr.EditorProfile = $"<{editorProfile}>";
             pr.ForumProfile = forumProfile;
+            if (forumProfile.StartsWith("http"))
+                pr.ForumProfile = $"<{forumProfile}>";
             pr.WikiProfile = wikiProfile;
+            if (wikiProfile.StartsWith("http"))
+                pr.WikiProfile = $"<{wikiProfile}>";
 
-            var embed = CreateEmbed(pr);
-            await ReplyAsync("", embed: embed);
+            //var embed = CreateEmbed(pr);
+            StringBuilder sr = new StringBuilder();
+            sr.AppendLine("Profiles for " + pr.EditorName);
+            sr.AppendLine("**Editor Profile**");
+            sr.AppendLine(pr.EditorProfile);
+            sr.AppendLine("**Forum Profile**");
+            sr.AppendLine(pr.ForumProfile);
+            sr.AppendLine("**Wiki Profile**");
+            sr.AppendLine(pr.WikiProfile);
+            await ReplyAsync(sr.ToString());
+            //await ReplyAsync("", embed: embed);
         }
 
         async Task<string> CheckProfile(string url, string profileType)

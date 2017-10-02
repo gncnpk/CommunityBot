@@ -13,7 +13,7 @@ namespace WazeBotDiscord.Classes.Roles
             [313431377724964876] = 313431621002854400, // South Central - corrected
             [299563059695976451] = 299564786973278208, // Great Lakes - corrected
             [300737538384199681] = 300784192797540362, // South Atlantic - corrected
-            //[313428729739083776] = , // Southeast
+            [313428729739083776] = 348317197917093899, // Southeast
             [300482201198395417] = 300816449289584642, // New England - corrected
             [300481818619150336] = 300816001606352897, // Northeast (NOR) - corrected
             [299676784327393281] = 299704715405557760, // Mid Atlantic - corrected
