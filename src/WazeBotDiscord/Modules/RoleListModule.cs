@@ -17,16 +17,27 @@ namespace WazeBotDiscord.Modules
             var orderedRoles = Context.Guild.Roles.OrderByDescending(r => r.Position);
 
             var replySb = new StringBuilder("__Roles__\n");
+            string reply = "";
             foreach (var role in orderedRoles)
             {
                 var roleName = role.Name;
                 if (roleName == "@everyone")
                     roleName = "(@)everyone";
-
-                replySb.AppendLine($"{roleName}: {role.Id}");
+                var roleLine = $"{roleName}: {role.Id}";
+                if(replySb.Length + roleLine.Length < 2000)
+                    replySb.AppendLine(roleLine);
+                else
+                {
+                    reply = replySb.ToString();
+                    reply = reply.TrimEnd('\\', 'n');
+                    await ReplyAsync(reply);
+                    replySb.Clear();
+                    replySb.AppendLine(roleLine);
+                }
+                
             }
 
-            var reply = replySb.ToString();
+            reply = replySb.ToString();
             reply = reply.TrimEnd('\\', 'n');
 
             await ReplyAsync(reply);
