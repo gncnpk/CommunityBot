@@ -149,7 +149,7 @@ namespace WazeBotDiscord.Modules
 
         [Command("l6", RunMode = RunMode.Async)]
         [Alias("level6", "r6", "rank6")]
-        [RequireChampInNationalGuild]
+        [RequireChampInNationalL6InGlobal]
         public async Task ToggleL6(IUser user)
         {
             if (IsSelf(user))
