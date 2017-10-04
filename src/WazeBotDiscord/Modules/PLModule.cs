@@ -24,6 +24,8 @@ namespace WazeBotDiscord.Modules
                 string result = rgx.Replace(itemMatch.ToString(), "");
                 sb.Append(result);
             }
+            if (sb.ToString().Length == 0)
+                sb.Append("No PLs found");
             await ReplyAsync(sb.ToString());
         }
     }
