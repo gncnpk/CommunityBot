@@ -14,7 +14,7 @@ namespace WazeBotDiscord.Modules
         public async Task Tiles([Remainder]string message = null)
         {
             StringBuilder sb = new StringBuilder();
-            Regex regURL = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
+            Regex regURL = new Regex(@"(?:http(?:s):\/\/)?(?:www\.|beta\.)?waze\.com\/(?:.*?\/)?editor\S+");
 
             foreach (Match itemMatch in regURL.Matches(message))
             {
