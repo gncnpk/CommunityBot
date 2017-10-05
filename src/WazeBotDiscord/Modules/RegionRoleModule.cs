@@ -12,6 +12,7 @@ namespace WazeBotDiscord.Modules
     {
         [Command("region", RunMode = RunMode.Async)]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleRegion(IUser userIn)
         {
             var exists = Region.Ids.TryGetValue(Context.Guild.Id, out var roleId);
