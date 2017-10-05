@@ -142,8 +142,10 @@ namespace WazeBotDiscord
             }
 
             int argPos = 0;
-            if (!(message.HasCharPrefix('!', ref argPos) || message.HasMentionPrefix(client.CurrentUser, ref argPos)))
+            if (!(message.HasCharPrefix('!', ref argPos) || message.HasMentionPrefix(client.CurrentUser, ref argPos) || message.HasCharPrefix('/', ref argPos)))
                 return;
+            if (message.ToString().StartsWith("/"))
+                argPos = 0;
 
             var context = new CommandContext(client, message);
             var result = await commands.ExecuteAsync(context, argPos, services);
