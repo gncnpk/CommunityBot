@@ -12,6 +12,7 @@ namespace WazeBotDiscord.Modules
         [Command("cm", RunMode = RunMode.Async)]
         [Alias("countrymanager")]
         [RequireCmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleCm(IUser user)
         {
             if (IsSelf(user))
@@ -40,6 +41,7 @@ namespace WazeBotDiscord.Modules
         [Command("sm", RunMode = RunMode.Async)]
         [Alias("statemanager")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleSm(IUser user)
         {
             if (IsSelf(user))
@@ -68,6 +70,7 @@ namespace WazeBotDiscord.Modules
         [Command("lam", RunMode = RunMode.Async)]
         [Alias("largeareamanager")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleLam(IUser user)
         {
             if (IsSelf(user))
@@ -99,6 +102,7 @@ namespace WazeBotDiscord.Modules
         [Command("am", RunMode = RunMode.Async)]
         [Alias("areamanager")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleAm(IUser user)
         {
             if (IsSelf(user))
@@ -129,6 +133,7 @@ namespace WazeBotDiscord.Modules
 
         [Command("mentor", RunMode = RunMode.Async)]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleMentor(IUser user)
         {
             if (IsSelf(user))
@@ -150,6 +155,7 @@ namespace WazeBotDiscord.Modules
         [Command("l6", RunMode = RunMode.Async)]
         [Alias("level6", "r6", "rank6")]
         [RequireChampInNationalL6InGlobal]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL6(IUser user)
         {
             if (IsSelf(user))
@@ -181,6 +187,7 @@ namespace WazeBotDiscord.Modules
         [Command("l5", RunMode = RunMode.Async)]
         [Alias("level5", "r5", "rank5")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL5(IUser user)
         {
             if (IsSelf(user))
@@ -212,6 +219,7 @@ namespace WazeBotDiscord.Modules
         [Command("l4", RunMode = RunMode.Async)]
         [Alias("level4", "r4", "rank4")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL4(IUser user)
         {
             if (IsSelf(user))
@@ -242,6 +250,7 @@ namespace WazeBotDiscord.Modules
 
         [Command("l3", RunMode = RunMode.Async)]
         [Alias("level3", "r3", "rank3")]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL3User()
         {
             await ToggleL3(Context.Message.Author);
@@ -250,6 +259,7 @@ namespace WazeBotDiscord.Modules
         [Command("l3", RunMode = RunMode.Async)]
         [Alias("level3", "r3", "rank3")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL3(IUser user)
         {
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
@@ -274,6 +284,7 @@ namespace WazeBotDiscord.Modules
 
         [Command("l2", RunMode = RunMode.Async)]
         [Alias("level2", "r2", "rank2")]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL2User()
         {
             await ToggleL2(Context.Message.Author);
@@ -282,6 +293,7 @@ namespace WazeBotDiscord.Modules
         [Command("l2", RunMode = RunMode.Async)]
         [Alias("level2", "r2", "rank2")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL2(IUser user)
         {
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
@@ -306,6 +318,7 @@ namespace WazeBotDiscord.Modules
 
         [Command("l1", RunMode = RunMode.Async)]
         [Alias("level1", "r1", "rank1")]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL1User()
         {
             await ToggleL1(Context.Message.Author);
@@ -314,6 +327,7 @@ namespace WazeBotDiscord.Modules
         [Command("l1", RunMode = RunMode.Async)]
         [Alias("level1", "r1", "rank1")]
         [RequireSmOrAbove]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleL1(IUser user)
         {
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
