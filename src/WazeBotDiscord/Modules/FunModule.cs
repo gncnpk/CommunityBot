@@ -1,15 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Discord;
+using Newtonsoft.Json;
 using Discord.Commands;
 using System.Text.RegularExpressions;
+using System.Net;
+using WazeBotDiscord.Fun;
 
 namespace WazeBotDiscord.Modules
 {
     public class FunModule : ModuleBase
     {
+
+        readonly FunService _funSvc;
+
+        public FunModule(FunService funSvc)
+        {
+            _funSvc = funSvc;
+        }
+
+        #region "Slap"
         [Command("/slap")]
         public async Task SlapUser([Remainder]string message = null)
         {
@@ -18,16 +30,18 @@ namespace WazeBotDiscord.Modules
                 nickname = Context.User.Username;
             await ReplyAsync($"{nickname} slaps {message} around a bit with a large trout.");
         }
+        #endregion
 
+        #region "Diceroll"
         [Command("diceroll")]
         public async Task Diceroll([Remainder]string message = null)
         {
             StringBuilder sb = new StringBuilder();
             Regex regURL = new Regex(@"(\d+)d(\d+)");
-            
+
             if (message == null)
                 message = "1d6";
-            
+
             if (regURL.Matches(message).Count > 1)
             {
                 int sum = 0;
@@ -87,5 +101,58 @@ namespace WazeBotDiscord.Modules
                 sb.Append(")");
             return Tuple.Create(sum, sb.ToString());
         }
+        #endregion
+
+        #region "Dad jokes"
+        [Command("dadjoke")]
+        public async Task GetDadJoke([Remainder]string message = null)
+        {
+            var result = _funSvc.GetWebRequest("https://icanhazdadjoke.com/slack", "application/json; charset=utf-8").Result;
+
+            var dadJoke = JsonConvert.DeserializeObject<TheDadJoke>(result);
+            await ReplyAsync(dadJoke.attachments[0].text);
+        }
+        public class TheDadJoke
+        {
+            public List<Attachment> attachments { get; set; }
+            public string response_type { get; set; }
+            public string username { get; set; }
+        }
+
+        public class Attachment
+        {
+            public string fallback { get; set; }
+            public string footer { get; set; }
+            public string text { get; set; }
+        }
+        #endregion
+
+        #region "Facts"
+        [Command("dogfact")]
+        public async Task GetDogFact([Remainder] string ignore = null)
+        {
+            var result = _funSvc.GetWebRequest("https://dog-api.kinduff.com/api/facts", "application/json; charset=utf-8").Result;
+
+            var dogFact = JsonConvert.DeserializeObject<DogFacts>(result);
+            await ReplyAsync(dogFact.facts[0]);
+        }
+
+        //{"facts":["An American Animal Hospital Association poll found that 33% of dog owners admit to talking to their dogs on the phone and leaving answering machine messages for them while away."],"success":true}
+        public class DogFacts
+        {
+            public List<string> facts { get; set; }
+            public Boolean success { get; set; }
+        }
+
+        [Command("numberfact")]
+        public async Task getNumberFactor([Remainder] string ignore = null)
+        {
+            
+            var result = _funSvc.GetWebRequest("http://numbersapi.com/random", "text/html").Result;
+
+            await ReplyAsync(result);
+        }
+
+        #endregion
     }
 }

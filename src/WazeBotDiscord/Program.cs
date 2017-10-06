@@ -15,6 +15,7 @@ using WazeBotDiscord.Twitter;
 using WazeBotDiscord.Scripts;
 using WazeBotDiscord.Outreach;
 using WazeBotDiscord.ServerLeave;
+using WazeBotDiscord.Fun;
 
 namespace WazeBotDiscord
 {
@@ -78,6 +79,8 @@ namespace WazeBotDiscord
             var serverLeaveService = new ServerLeaveService(httpClient);
             await serverLeaveService.InitAutoreplyServiceAsync();
 
+            var funService = new FunService();
+
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -89,6 +92,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(scriptsService);
             serviceCollection.AddSingleton(outreachService);
             serviceCollection.AddSingleton(serverLeaveService);
+            serviceCollection.AddSingleton(funService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
