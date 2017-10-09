@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System;
 
 namespace WazeBotDiscord.Keywords
 {
@@ -44,7 +46,24 @@ namespace WazeBotDiscord.Keywords
 
                 reply.Append("```\n");
                 reply.Append("Message:\n```\n");
-                reply.Append(msg.Content);
+                //Resolve any name mentions into the nickname - mentions don't resolve in code blocks
+                //<@(\d{18})>
+                Regex regName = new Regex(@"<@!?(\d{18})>");
+
+                string newMsg = msg.Content;
+                foreach (Match itemMatch in regName.Matches(msg.Content))
+                {
+                    newMsg = newMsg.Replace(itemMatch.Groups[0].ToString(), $"@{client.GetUser(Convert.ToUInt64(itemMatch.Groups[1].ToString())).Username}");
+                }
+
+                
+                Regex regChannel = new Regex(@"<#(\d{18})>");
+                foreach (Match itemMatch in regChannel.Matches(msg.Content))
+                {
+                    newMsg = newMsg.Replace(itemMatch.Groups[0].ToString(), $"#{((ISocketMessageChannel)client.GetChannel(Convert.ToUInt64(itemMatch.Groups[1].ToString()))).Name}");
+                }
+
+                reply.Append(newMsg);
                 reply.Append("\n```");
 
                 var dm = await client.GetUser(m.UserId).GetOrCreateDMChannelAsync();
