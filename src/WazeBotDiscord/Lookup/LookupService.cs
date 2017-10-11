@@ -33,7 +33,7 @@ namespace WazeBotDiscord.Lookup
         {
             var sheet = _sheets.Find(s => s.ChannelId == channelId);
             if (sheet == null)
-                return "This chanel is not configured to search a spreadsheet.";
+                return "This channel is not configured to search a spreadsheet.";
 
             return $"<https://docs.google.com/spreadsheets/d/{sheet.SheetId}/edit>";
         }
@@ -44,7 +44,7 @@ namespace WazeBotDiscord.Lookup
 
             var sheet = _sheets.Find(s => s.ChannelId == channelId);
             if (sheet == null)
-                return "This chanel is not configured to search a spreadsheet.";
+                return "This channel is not configured to search a spreadsheet.";
 
             var parser = new HtmlParser();
             string sheetURL;
