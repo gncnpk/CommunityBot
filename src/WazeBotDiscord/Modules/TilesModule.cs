@@ -44,7 +44,7 @@ namespace WazeBotDiscord.Modules
             {
                 Color = new Color(147, 196, 211),
                 Title = "Waze Status",
-                Url = $"https://wazestatus.wordpress.com",
+                Url = $"https://status.waze.com",
                 Description = item.NATileDate + Environment.NewLine + item.NAUpdatePerformed + Environment.NewLine + item.INTLTileDate + Environment.NewLine + item.INTLUpdatePerformed,
 
                 /*Footer = new EmbedFooterBuilder
