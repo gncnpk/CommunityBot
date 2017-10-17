@@ -33,7 +33,7 @@ namespace WazeBotDiscord.Scripts
         {
             /*var sheet = _sheets.Find(s => s.ChannelId == channelId);
             if (sheet == null)
-                return "This chanel is not configured to search a spreadsheet.";*/
+                return "This channel is not configured to search a spreadsheet.";*/
 
             return $"<https://docs.google.com/spreadsheets/u/1/d/1yrEZMrQyMjhgBAJuNj7Y8z0GxdKWgIEkHIQBhUM2H9k>";
         }
