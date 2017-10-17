@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace WazeBotDiscord.Events
             // here we go boiz
             foreach (var guild in await RoleSyncHelpers.GetUserGuildsAsync(user, client))
             {
-                var roleSet = false;
+                //var roleSet = false;
                 var guildUser = guild.GetUser(user.Id);
 
                 // loop through each role we're tracking in the guild
@@ -35,6 +36,7 @@ namespace WazeBotDiscord.Events
                     if (!guildUser.Roles.Any(r => r.Id == roleId))
                         continue;
 
+
                     // at this point, we've verified that:
                     // - the new guild has this role
                     // - the guild being checked has this role
@@ -49,13 +51,13 @@ namespace WazeBotDiscord.Events
                     await user.AddRoleAsync(newRole);
 
                     // set this to true so the top loop is broken
-                    roleSet = true;
+                    //roleSet = true;
 
-                    break;
+                    //break;
                 }
 
-                if (roleSet)
-                    break;
+                //if (roleSet)
+                //    break;
             }
         }
 
