@@ -4,12 +4,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System;
+using WazeBotDiscord.DND;
 
 namespace WazeBotDiscord.Keywords
 {
     public static class KeywordHandler
     {
-        public static async Task HandleKeywordAsync(SocketMessage msg, KeywordService service, DiscordSocketClient client)
+        public static async Task HandleKeywordAsync(SocketMessage msg, KeywordService service, DiscordSocketClient client, DND.DNDService _dndService)
         {
             if (msg.Author.Id == client.CurrentUser.Id || msg.Channel is SocketDMChannel)
                 return;
@@ -21,6 +22,15 @@ namespace WazeBotDiscord.Keywords
                 if (msg.Author.Id == m.UserId
                     || !channel.Users.Any(u => u.Id == m.UserId))
                     continue;
+
+                DNDListItem dndItem = _dndService.GetExistingDND(m.UserId);
+                if (dndItem != null)
+                {
+                    if (dndItem.EndTime > DateTime.Now)
+                        continue;
+                    else
+                        await _dndService.RemoveDND(m.UserId);
+                }
 
                 string nickname = ((Discord.WebSocket.SocketGuildUser)msg.Author).Nickname;
                 var reply = new StringBuilder();

@@ -8,6 +8,7 @@ using WazeBotDiscord.Lookup;
 using WazeBotDiscord.Twitter;
 using WazeBotDiscord.Outreach;
 using WazeBotDiscord.ServerLeave;
+using WazeBotDiscord.DND;
 
 namespace WazeBotDiscord
 {
@@ -21,6 +22,7 @@ namespace WazeBotDiscord
         public DbSet<DbUserMutedGuild> MutedGuilds { get; set; }
         public DbSet<OutreachSheetToSearch> OutreachSheetsToSearch { get; set; }
         public DbSet<LeaveMessageChannel> LeaveMessageChannels { get; set; }
+        public DbSet<DNDListItem> DndList { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -86,6 +88,15 @@ namespace WazeBotDiscord
                 e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
                 e.Property(r => r.SheetId).HasColumnName("sheet_id").IsRequired().HasMaxLength(100);
                 e.Property(r => r.GId).HasColumnName("Gid").IsRequired().HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<DNDListItem>(e =>
+            {
+                e.ToTable("dnd_list");
+                e.HasKey(r => r.UserId);
+
+                e.Property(r => r.UserId).HasColumnName("user_id");
+                e.Property(r => r.EndTime).HasColumnName("end_time").IsRequired();
             });
 
             modelBuilder.Entity<DbKeyword>(e =>
