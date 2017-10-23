@@ -29,6 +29,27 @@ namespace WazeBotDiscord.Modules
         public async Task TaskAddDNDTime(string dndTime)
         {
             double hours = 0;
+            if (dndTime.Length == 1)
+            {
+                if (dndTime.ToLower() == "q")
+                    dndTime = "1";
+                else if (dndTime.ToLower() == "w")
+                    dndTime = "2";
+                else if (dndTime.ToLower() == "e")
+                    dndTime = "3";
+                else if (dndTime.ToLower() == "r")
+                    dndTime = "4";
+                else if (dndTime.ToLower() == "t")
+                    dndTime = "5";
+                else if (dndTime.ToLower() == "y")
+                    dndTime = "6";
+                else if (dndTime.ToLower() == "u")
+                    dndTime = "7";
+                else if (dndTime.ToLower() == "i")
+                    dndTime = "8";
+                else if (dndTime.ToLower() == "o")
+                    dndTime = "9";
+            }
             try
             {
                 hours = Convert.ToDouble(dndTime);
