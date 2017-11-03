@@ -17,6 +17,7 @@ using WazeBotDiscord.Outreach;
 using WazeBotDiscord.ServerLeave;
 using WazeBotDiscord.Fun;
 using WazeBotDiscord.DND;
+using WazeBotDiscord.Announce;
 
 namespace WazeBotDiscord
 {
@@ -85,7 +86,8 @@ namespace WazeBotDiscord
             var dndService = new DNDService(httpClient);
             await dndService.InitAsync();
 
-
+            var announceService = new AnnounceService();
+            await announceService.InitAnnounceServiceAsync(client);
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -99,6 +101,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(serverLeaveService);
             serviceCollection.AddSingleton(funService);
             serviceCollection.AddSingleton(dndService);
+            serviceCollection.AddSingleton(announceService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 

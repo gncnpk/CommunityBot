@@ -9,6 +9,7 @@ using WazeBotDiscord.Twitter;
 using WazeBotDiscord.Outreach;
 using WazeBotDiscord.ServerLeave;
 using WazeBotDiscord.DND;
+using WazeBotDiscord.Announce;
 
 namespace WazeBotDiscord
 {
@@ -23,6 +24,7 @@ namespace WazeBotDiscord
         public DbSet<OutreachSheetToSearch> OutreachSheetsToSearch { get; set; }
         public DbSet<LeaveMessageChannel> LeaveMessageChannels { get; set; }
         public DbSet<DNDListItem> DndList { get; set; }
+        public DbSet<AnnounceChannel> AnnounceList { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -97,6 +99,14 @@ namespace WazeBotDiscord
 
                 e.Property(r => r.UserId).HasColumnName("user_id");
                 e.Property(r => r.EndTime).HasColumnName("end_time").IsRequired();
+            });
+
+            modelBuilder.Entity<AnnounceChannel>(e =>
+            {
+                e.ToTable("announce_channels");
+                e.HasKey(r => r.Channel);
+
+                e.Property(r => r.Channel).HasColumnName("channel_id").IsRequired();
             });
 
             modelBuilder.Entity<DbKeyword>(e =>
