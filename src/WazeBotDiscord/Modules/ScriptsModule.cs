@@ -6,6 +6,7 @@ using WazeBotDiscord.Utilities;
 namespace WazeBotDiscord.Modules
 {
     [Group("scripts")]
+    [Alias("script")]
     public class ScriptsModule : ModuleBase
     {
         readonly ScriptsService _scriptsService;
