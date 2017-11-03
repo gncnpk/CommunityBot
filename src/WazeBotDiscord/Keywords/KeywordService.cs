@@ -128,6 +128,22 @@ namespace WazeBotDiscord.Keywords
             return _keywords.Where(k => k.UserId == userId).ToList();
         }
 
+        public UserMutedChannels GetMutedChannelsForUser(ulong userId)
+        {
+            var mutedList = _mutedChannels.Where(k => k.UserId == userId).ToList();
+            if (mutedList.Count == 1) //only return the requested user's muted object
+                return mutedList[0];
+            return null;
+        }
+
+        public UserMutedGuilds GetMutedGuildsForUser(ulong userId)
+        {
+            var mutedList = _mutedGuilds.Where(k => k.UserId == userId).ToList();
+            if (mutedList.Count == 1) //only return the requested user's muted object
+                return mutedList[0];
+            return null;
+        }
+
         /// <summary>
         /// Adds a new keyword to a user.
         /// </summary>

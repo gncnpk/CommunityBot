@@ -236,6 +236,43 @@ namespace WazeBotDiscord.Keywords
                         break;
                 }
             }
+
+            [Command("list")]
+            public async Task ListIgnored([Remainder] string notUsed = null)
+            {
+                var keywords = _kwdSvc.GetKeywordsForUser(Context.Message.Author.Id);
+                var reply = new StringBuilder();
+
+                if (keywords.Count == 0)
+                {
+                    reply.Append(Context.Message.Author.Mention);
+                    reply.Append(": You have no keywords.");
+                }
+                else
+                {
+                    foreach (var k in keywords)
+                    {
+                        if (k.IgnoredChannels.Count > 0 || k.IgnoredGuilds.Count > 0) {
+                            reply.Append($"**{k.Keyword}**");
+                            if (k.IgnoredChannels.Count > 0)
+                            {
+                                reply.Append($"\nIgnored Channels: ");
+                                for(var i=0; i<k.IgnoredChannels.Count; i++)
+                                {
+                                    reply.Append($"{(i>0 ? ", " : "")}<#{k.IgnoredChannels[i]}>");
+                                }
+                            }
+                            if(k.IgnoredGuilds.Count > 0)
+                            {
+                                reply.Append($"\nIgnored Servers: ");
+                                reply.Append(k.Keyword);
+                            }
+                        }
+                    }
+                }
+
+                await ReplyAsync(reply.ToString());
+            }
         }
 
         [Group("unignore")]
@@ -364,6 +401,42 @@ namespace WazeBotDiscord.Keywords
 
                 await _kwdSvc.MuteChannelAsync(Context.Message.Author.Id, channelID);
                 await ReplyAsync($"{Context.Message.Author.Mention}: Muted {channel.Name}.");
+            }
+
+            [Command("list")]
+            public async Task ListMuted([Remainder] string notUsed = null)
+            {
+                var mutedChannels = _kwdSvc.GetMutedChannelsForUser(Context.Message.Author.Id);
+                var mutedGuilds = _kwdSvc.GetMutedGuildsForUser(Context.Message.Author.Id);
+                var reply = new StringBuilder();
+
+                if (mutedChannels.ChannelIds.Count == 0 && mutedGuilds == null)
+                {
+                    reply.Append("No channels or guilds are muted.");
+                }
+                else
+                {
+                    if(mutedChannels != null)
+                    {
+                        reply.Append("Muted Channels\n");
+                        for(var i=0; i<mutedChannels.ChannelIds.Count; i++)
+                        {
+                            reply.Append($"{(i > 0 ? ", " : "")}<#{mutedChannels.ChannelIds[i]}>");
+                        }
+                    }
+
+                    if (mutedGuilds != null)
+                    {
+                        reply.Append($"{(mutedChannels != null ? "\n" : "")}Muted Servers\n");
+                        for (var i = 0; i < mutedGuilds.GuildIds.Count; i++)
+                        {
+                            var guild = await Context.Client.GetGuildAsync(mutedGuilds.GuildIds[i]);
+                            reply.Append($"{(i > 0 ? ", " : "")}{(guild != null ? guild.Name : mutedGuilds.GuildIds[i].ToString())}");
+                        }
+                    }
+                }
+
+                await ReplyAsync(reply.ToString());
             }
         }
 
