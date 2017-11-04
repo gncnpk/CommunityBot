@@ -270,7 +270,8 @@ namespace WazeBotDiscord.Keywords
                         }
                     }
                 }
-
+                if (reply.Length == 0)
+                    reply.Append("No keywords are ignored in any channels or servers.");
                 await ReplyAsync(reply.ToString());
             }
         }

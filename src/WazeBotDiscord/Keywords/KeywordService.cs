@@ -317,7 +317,7 @@ namespace WazeBotDiscord.Keywords
             var record = GetRecord(userId, keyword);
             if (record == null)
                 return UnignoreResult.NotSubscribed;
-            if (channelIds.All(c => !record.IgnoredGuilds.Contains(c)))
+            if (channelIds.All(c => !record.IgnoredChannels.Contains(c)))
                 return UnignoreResult.NotIgnored;
 
             var channels = channelIds.Distinct().Intersect(record.IgnoredChannels);
