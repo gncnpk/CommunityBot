@@ -410,9 +410,9 @@ namespace WazeBotDiscord.Keywords
                 var mutedGuilds = _kwdSvc.GetMutedGuildsForUser(Context.Message.Author.Id);
                 var reply = new StringBuilder();
 
-                if (mutedChannels.ChannelIds.Count == 0 && mutedGuilds == null)
+                if (mutedChannels == null && mutedGuilds == null)
                 {
-                    reply.Append("No channels or guilds are muted.");
+                    reply.Append("No channels or servers are muted.");
                 }
                 else
                 {
