@@ -265,7 +265,11 @@ namespace WazeBotDiscord.Keywords
                             if(k.IgnoredGuilds.Count > 0)
                             {
                                 reply.Append($"\nIgnored Servers: ");
-                                reply.Append(k.Keyword);
+                                for(var i=0; i<k.IgnoredGuilds.Count; i++)
+                                {
+                                    var guild = await Context.Client.GetGuildAsync(k.IgnoredGuilds[i]);
+                                    reply.Append($"{(i > 0 ? ", " : "")}{guild.Name}");
+                                }
                             }
                         }
                     }
@@ -304,7 +308,7 @@ namespace WazeBotDiscord.Keywords
                     case UnignoreResult.Success:
                         var guild = await Context.Client.GetGuildAsync(guildId);
                         await ReplyAsync($"{Context.Message.Author.Mention}: " +
-                            "Unignored keyword `{keyword}` in server {guild.Name}.");
+                            $"Unignored keyword `{keyword}` in server {guild.Name}.");
                         break;
 
                     case UnignoreResult.NotIgnored:
