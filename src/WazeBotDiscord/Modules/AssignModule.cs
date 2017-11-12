@@ -11,7 +11,7 @@ namespace WazeBotDiscord.Modules
     public class AssignModule : ModuleBase
     {
         [Command("assign")]
-        [RequireChampInNationalGuild]
+        [RequireAdminInGlobal]
         public async Task AssignRoles(IRole role, params IUser[] users)
         {
             foreach (SocketGuildUser myuser in users)
