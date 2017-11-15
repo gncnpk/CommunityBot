@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -40,7 +40,7 @@ namespace WazeBotDiscord.Modules
             }
             HttpClient httpClient = new HttpClient();
             string body = await httpClient.GetStringAsync(url);
-
+            
             Regex regTitle = new Regex("id=\"ctitle\">(.*?)</div>");
             Match matchTitle = regTitle.Match(body);
             Regex regImageURL = new Regex("<div id=\"comic\">(\\s|\\n)<img src=\"(.*?)\"");
@@ -49,7 +49,7 @@ namespace WazeBotDiscord.Modules
             Match matchTitleText = regTitleText.Match(body);
             xkcdresult.Title = matchTitle.Groups[1].ToString();
             xkcdresult.ImageURL = matchImageURL.Groups[2].ToString().Replace("//", "https://");
-            xkcdresult.AltText = matchTitleText.Groups[1].ToString();
+            xkcdresult.AltText = WebUtility.HtmlDecode(matchTitleText.Groups[1].ToString());
         }
 
         Embed CreateEmbed(XKCDResult xkcdresult)
