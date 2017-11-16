@@ -61,13 +61,13 @@ namespace WazeBotDiscord.Glossary
 
                 var term = row.Cells[0].Children.First(c => c.TagName == "B").TextContent.Trim();
                 var ids = row.Cells[0].Children.Where(c => c.TagName == "SPAN").Select(c => c.Id.Trim());
-
+                row.Cells[2].InnerHtml = row.Cells[2].InnerHtml.Replace("<p>", "\n").Replace("</p>", "").Replace("<br>", "\n");
                 _items.Add(new GlossaryItem
                 {
                     Ids = ids.ToList(),
                     Term = term,
                     Alternates = alternates,
-                    Description = row.Cells[2].TextContent.Replace("<br>", "\n").Trim(),
+                    Description = row.Cells[2].TextContent.Trim(),
                     ModifiedAt = dt
                 });
             }
