@@ -98,6 +98,12 @@ namespace WazeBotDiscord.Autoreplies
             return _autoreplies.FindAll(a => a.ChannelId == 1 && a.GuildId == 1);
         }
 
+        public Autoreply GetGlobalAutoreply(string msg)
+        {
+            var globals = _autoreplies.FindAll(a => a.ChannelId == 1 && a.GuildId == 1);
+            return globals.Find(r => msg.StartsWith($"!{r.Trigger}"));
+        }
+
         List<Autoreply> BuildList(ulong channelId, ulong guildId)
         {
             var autoreplyList = _autoreplies.FindAll(a => a.ChannelId == channelId);
