@@ -32,7 +32,10 @@ namespace WazeBotDiscord.Keywords
                         await _dndService.RemoveDND(m.UserId);
                 }
 
-                string nickname = ((Discord.WebSocket.SocketGuildUser)msg.Author).Nickname;
+                string nickname = null;
+                if(msg.Author is Discord.WebSocket.SocketGuildUser)
+                    nickname = ((Discord.WebSocket.SocketGuildUser)msg.Author).Nickname;
+                
                 var reply = new StringBuilder();
                 reply.Append(msg.Author.Username);
                 if(nickname != null)
