@@ -1,12 +1,6 @@
-﻿using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WazeBotDiscord.ServerLeave
@@ -21,7 +15,7 @@ namespace WazeBotDiscord.ServerLeave
             _client = client;
         }
 
-        public async Task InitAutoreplyServiceAsync()
+        public async Task InitServerLeaveServiceAsync()
         {
             using (var db = new WbContext())
             {
