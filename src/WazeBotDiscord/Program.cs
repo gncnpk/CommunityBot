@@ -18,6 +18,7 @@ using WazeBotDiscord.ServerLeave;
 using WazeBotDiscord.Fun;
 using WazeBotDiscord.DND;
 using WazeBotDiscord.Announce;
+using WazeBotDiscord.ServerJoin;
 
 namespace WazeBotDiscord
 {
@@ -79,7 +80,7 @@ namespace WazeBotDiscord
             //await scriptsService.InitAsync();
 
             var serverLeaveService = new ServerLeaveService(httpClient);
-            await serverLeaveService.InitAutoreplyServiceAsync();
+            await serverLeaveService.InitServerLeaveServiceAsync();
 
             var funService = new FunService();
 
@@ -88,6 +89,9 @@ namespace WazeBotDiscord
 
             var announceService = new AnnounceService();
             await announceService.InitAnnounceServiceAsync(client);
+
+            var serverJoinService = new ServerJoinService();
+            await serverJoinService.InitAsync();
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -102,6 +106,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(funService);
             serviceCollection.AddSingleton(dndService);
             serviceCollection.AddSingleton(announceService);
+            serviceCollection.AddSingleton(serverJoinService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
@@ -126,6 +131,7 @@ namespace WazeBotDiscord
 
             client.UserJoined += async (SocketGuildUser user) => await UserJoinedRoleSyncEvent.SyncRoles(user, client);
             client.UserLeft += async (SocketGuildUser user) => await UserLeftEvent.Alert(user, client, serverLeaveService);
+            client.UserJoined += async (SocketGuildUser user) => await UserJoinMessageEvent.SendMessage(user, client, serverJoinService);
 
             await InstallCommands();
 
