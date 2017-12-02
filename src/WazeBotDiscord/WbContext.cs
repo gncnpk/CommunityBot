@@ -10,6 +10,7 @@ using WazeBotDiscord.Outreach;
 using WazeBotDiscord.ServerLeave;
 using WazeBotDiscord.DND;
 using WazeBotDiscord.Announce;
+using WazeBotDiscord.ServerJoin;
 
 namespace WazeBotDiscord
 {
@@ -25,6 +26,7 @@ namespace WazeBotDiscord
         public DbSet<LeaveMessageChannel> LeaveMessageChannels { get; set; }
         public DbSet<DNDListItem> DndList { get; set; }
         public DbSet<AnnounceChannel> AnnounceList { get; set; }
+        public DbSet<ServerJoinRecord> ServerJoinRecords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -45,6 +47,14 @@ namespace WazeBotDiscord
                 e.Property(r => r.Reply).HasColumnName("reply").IsRequired().HasMaxLength(1500);
                 e.Property(r => r.AddedById).HasColumnName("added_by_id").IsRequired();
                 e.Property(r => r.AddedAt).HasColumnName("added_at").IsRequired();
+            });
+
+            modelBuilder.Entity<ServerJoinRecord>(e =>
+            {
+                e.ToTable("server_join_messages");
+                e.HasKey(r => r.GuildId);
+                e.Property(r => r.GuildId).HasColumnName("guild_id").IsRequired();
+                e.Property(r => r.JoinMessage).HasColumnName("message").IsRequired().HasMaxLength(2000);
             });
 
             modelBuilder.Entity<TwitterToCheck>(e =>
