@@ -8,7 +8,7 @@ using Discord.WebSocket;
 namespace WazeBotDiscord.Modules
 {
     [Group("serverjoin")]
-    [RequireChampInNationalAdminInGlobal]
+    [RequireChampInUSAdminInGlobalScriptsAttribute]
     public class ServerJoinModule : ModuleBase
     {
         readonly ServerJoinService _serverJoinSvc;
@@ -16,6 +16,17 @@ namespace WazeBotDiscord.Modules
         public ServerJoinModule(ServerJoinService serverJoinSvc)
         {
             _serverJoinSvc = serverJoinSvc;
+        }
+
+        [Command]
+        public async Task GetMessage()
+        {
+            var message = _serverJoinSvc.GetExistingJoinMessage(Context.Guild.Id);
+
+            if (message == null)
+                await ReplyAsync("No join message has been set for this server.");
+
+            await ReplyAsync(message.JoinMessage);
         }
 
         [Command("add")]

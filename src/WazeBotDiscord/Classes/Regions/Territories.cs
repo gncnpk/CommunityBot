@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WazeBotDiscord.Classes.Regions
+namespace WazeBotDiscord.Classes.Servers
 {
     class Territories
     {

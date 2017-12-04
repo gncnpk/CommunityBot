@@ -1,4 +1,4 @@
-﻿namespace WazeBotDiscord.Classes.Regions
+﻿namespace WazeBotDiscord.Classes.Servers
 {
     public static class GreatLakesChannels
     {

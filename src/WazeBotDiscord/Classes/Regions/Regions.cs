@@ -1,6 +1,6 @@
-﻿namespace WazeBotDiscord.Classes.Regions
+﻿namespace WazeBotDiscord.Classes.Servers
 {
-    public static class Regions
+    public static class Servers
     {
         public const ulong National = 300471946494214146;
         public const ulong Northwest = 313435914540154890;
@@ -14,5 +14,7 @@
         public const ulong Northeast = 300481818619150336;
         public const ulong MidAtlantic = 299676784327393281;
         public const ulong CommunityTest = 360595895965843456;
+        public const ulong WazeScripts = 347019166655709184;
+        public const ulong GlobalMapraid = 347386780074377217;
     }
 }
