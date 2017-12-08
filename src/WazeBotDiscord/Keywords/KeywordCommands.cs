@@ -253,6 +253,8 @@ namespace WazeBotDiscord.Keywords
                     foreach (var k in keywords)
                     {
                         if (k.IgnoredChannels.Count > 0 || k.IgnoredGuilds.Count > 0) {
+                            if(reply.Length > 0)
+                                reply.Append("\n"); //need an extra new line to space out the list
                             reply.Append($"**{k.Keyword}**");
                             if (k.IgnoredChannels.Count > 0)
                             {
