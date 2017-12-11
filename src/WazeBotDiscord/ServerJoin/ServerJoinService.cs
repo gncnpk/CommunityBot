@@ -79,10 +79,9 @@ namespace WazeBotDiscord.ServerJoin
             return _serverJoinMessages.Find(r => r.GuildId == guildId);
         }
 
-        public async Task ReloadSheetsAsync()
+        public async Task ReloadServerjoinAsync()
         {
             _serverJoinMessages.Clear();
-
             await InitAsync();
         }
     }

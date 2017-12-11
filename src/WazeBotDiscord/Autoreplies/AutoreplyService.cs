@@ -112,5 +112,11 @@ namespace WazeBotDiscord.Autoreplies
 
             return autoreplyList;
         }
+
+        public async Task ReloadAutorepliesAsync()
+        {
+            _autoreplies.Clear();
+            await InitAutoreplyServiceAsync();
+        }
     }
 }

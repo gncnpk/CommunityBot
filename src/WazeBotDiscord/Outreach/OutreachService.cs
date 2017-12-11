@@ -207,10 +207,9 @@ namespace WazeBotDiscord.Outreach
             return _sheets.Find(r => r.ChannelId == channelId && r.GuildId == guildId);
         }
 
-        public async Task ReloadSheetsAsync()
+        public async Task ReloadOutreachAsync()
         {
             _sheets.Clear();
-
             await InitAsync();
         }
     }
