@@ -6,11 +6,12 @@ using WazeBotDiscord.Scripts;
 using WazeBotDiscord.ServerJoin;
 using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Outreach;
+using WazeBotDiscord.Utilities;
 
 namespace WazeBotDiscord.Modules
 {
     [Group("reload")]
-    [RequireOwner]
+    [RequireChampInUSAdminInGlobalScripts]
     public class ReloadModule : ModuleBase
     {
         readonly TwitterService _twitterSvc;
