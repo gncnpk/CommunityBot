@@ -19,7 +19,7 @@ namespace WazeBotDiscord.Classes.Roles
             [299676784327393281] = 299704715405557760, // Mid Atlantic - corrected
             [347386780074377217] = 347410199579197450, // Map Raid - corrected
             //[360595895965843456] = , // Community Test Server
-            [356076662812573698] = 356519948786597888, // VEOC - corrected
+            [356076662812573698] = 356439601482563586, // VEOC - corrected
             [352258352417603587] = 352263231965888512, // Territories - corrected
             [347019166655709184] = 347062575613083649  // Waze Scripts
         };
