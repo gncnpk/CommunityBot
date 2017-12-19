@@ -72,5 +72,11 @@ namespace WazeBotDiscord.Glossary
                 });
             }
         }
+
+        public async Task ReloadGlossaryAsync()
+        {
+            _items.Clear();
+            await InitAsync();
+        }
     }
 }

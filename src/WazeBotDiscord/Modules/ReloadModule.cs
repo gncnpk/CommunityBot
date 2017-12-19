@@ -7,6 +7,7 @@ using WazeBotDiscord.ServerJoin;
 using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Outreach;
 using WazeBotDiscord.Utilities;
+using WazeBotDiscord.Glossary;
 
 namespace WazeBotDiscord.Modules
 {
@@ -20,8 +21,10 @@ namespace WazeBotDiscord.Modules
         readonly ServerJoinService _serverJoinSvc;
         readonly AutoreplyService _autoreplySvc;
         readonly OutreachService _outreachSvc;
+        readonly GlossaryService _glossarySvc;
 
-        public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc, ScriptsService scriptsSvc, ServerJoinService serverJoinSvc, AutoreplyService autoreplySvc, OutreachService outreachSvc)
+        public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc, ScriptsService scriptsSvc, ServerJoinService serverJoinSvc, AutoreplyService autoreplySvc, OutreachService outreachSvc,
+            GlossaryService glossarySvc)
         {
             _twitterSvc = twitterSvc;
             _lookupSvc = lookupSvc;
@@ -29,6 +32,7 @@ namespace WazeBotDiscord.Modules
             _serverJoinSvc = serverJoinSvc;
             _autoreplySvc = autoreplySvc;
             _outreachSvc = outreachSvc;
+            _glossarySvc = glossarySvc;
         }
 
         [Command()]
@@ -72,6 +76,13 @@ namespace WazeBotDiscord.Modules
         {
             await _autoreplySvc.ReloadAutorepliesAsync();
             await ReplyAsync("Autoreplies reloaded.");
+        }
+
+        [Command("glossary")]
+        public async Task ReloadGlossary()
+        {
+            await _glossarySvc.ReloadGlossaryAsync();
+            await ReplyAsync("Glossary reloaded.");
         }
     }
 }
