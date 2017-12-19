@@ -38,7 +38,7 @@ namespace WazeBotDiscord.Modules
         [Command()]
         public async Task AvailableModules()
         {
-            await ReplyAsync("Modules available to reload: twitter, lookup, outreach, serverjoin, autoreplies");
+            await ReplyAsync("Modules available to reload: twitter, lookup, outreach, serverjoin, autoreplies, glossary");
         }
 
         [Command("twitter")]
