@@ -19,6 +19,7 @@ using WazeBotDiscord.Fun;
 using WazeBotDiscord.DND;
 using WazeBotDiscord.Announce;
 using WazeBotDiscord.ServerJoin;
+using WazeBotDiscord.Wikisearch;
 
 namespace WazeBotDiscord
 {
@@ -93,6 +94,8 @@ namespace WazeBotDiscord
             var serverJoinService = new ServerJoinService();
             await serverJoinService.InitAsync();
 
+            var wikisearchService = new WikisearchService();
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(autoreplyService);
@@ -107,6 +110,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(dndService);
             serviceCollection.AddSingleton(announceService);
             serviceCollection.AddSingleton(serverJoinService);
+            serviceCollection.AddSingleton(wikisearchService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
