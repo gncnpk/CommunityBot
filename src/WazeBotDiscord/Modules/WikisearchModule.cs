@@ -8,6 +8,7 @@ using WazeBotDiscord.Wikisearch;
 namespace WazeBotDiscord.Modules
 {
     [Group("search")]
+    [Alias("w")]
     public class WikisearchModule : ModuleBase
     {
         readonly WikisearchService _wikiSearchService;
@@ -17,7 +18,13 @@ namespace WazeBotDiscord.Modules
             _wikiSearchService = searchSvc;
         }
 
-        [Command]
+        [Command()]
+        public async Task NoSearchTerm()
+        {
+            await ReplyAsync("Please specify a search term. Ex: `!search Places`");
+        }
+
+        [Command(RunMode = RunMode.Async), Priority(5)]
         public async Task Search([Remainder]string searchphrase)
         {
             List<SearchItem> results;
