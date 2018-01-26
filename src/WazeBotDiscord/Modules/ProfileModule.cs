@@ -84,16 +84,19 @@ namespace WazeBotDiscord.Modules
 
         Embed CreateEmbed(ProfileResult item)
         {
-            var users = Context.Guild.GetUsersAsync(CacheMode.AllowDownload);
             string avatarURL = "";
             ulong userID = 0;
-            foreach (var u in users.Result)
-            {
-                if (u.Username.ToLower().StartsWith(item.EditorName.ToLower()))
+            if (Context.Guild != null) { 
+                var users = Context.Guild.GetUsersAsync(CacheMode.AllowDownload);
+
+                foreach (var u in users.Result)
                 {
-                    avatarURL = u.GetAvatarUrl();
-                    userID = u.Id;
-                    break;
+                    if (u.Username.ToLower().StartsWith(item.EditorName.ToLower()))
+                    {
+                        avatarURL = u.GetAvatarUrl();
+                        userID = u.Id;
+                        break;
+                    }
                 }
             }
             StringBuilder sr = new StringBuilder();
