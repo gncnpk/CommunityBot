@@ -47,8 +47,8 @@ namespace WazeBotDiscord.Modules
             if (wikiProfile.StartsWith("http"))
                 pr.WikiProfile = $"<{wikiProfile}>";
 
-            //var embed = CreateEmbed(pr);
-            StringBuilder sr = new StringBuilder();
+            var embed = CreateEmbed(pr);
+           /* StringBuilder sr = new StringBuilder();
             
             sr.AppendLine($":bust_in_silhouette: **{pr.EditorName}**");
             sr.AppendLine("_Editor Profile_");
@@ -56,9 +56,9 @@ namespace WazeBotDiscord.Modules
             sr.AppendLine("_Forum Profile_");
             sr.AppendLine(pr.ForumProfile);
             sr.AppendLine("_Wiki Profile_");
-            sr.AppendLine(pr.WikiProfile);
-            await ReplyAsync(sr.ToString());
-            //await ReplyAsync("", embed: embed);
+            sr.AppendLine(pr.WikiProfile);*/
+            //await ReplyAsync(sr.ToString());
+            await ReplyAsync("", embed: embed);
         }
 
         async Task<string> CheckProfile(string url, string profileType)
@@ -86,21 +86,26 @@ namespace WazeBotDiscord.Modules
         {
             var users = Context.Guild.GetUsersAsync(CacheMode.AllowDownload);
             string avatarURL = "";
+            ulong userID = 0;
             foreach (var u in users.Result)
             {
                 if (u.Username.ToLower().StartsWith(item.EditorName.ToLower()))
                 {
                     avatarURL = u.GetAvatarUrl();
+                    userID = u.Id;
                     break;
                 }
             }
             StringBuilder sr = new StringBuilder();
-            sr.AppendLine("**Editor Profile**");
-            sr.AppendLine(item.EditorProfile);
-            sr.AppendLine("**Forum Profile**");
-            sr.AppendLine(item.ForumProfile);
-            sr.AppendLine("**Wiki Profile**");
-            sr.AppendLine(item.WikiProfile);
+            sr.AppendLine("[Editor Profile](" + item.EditorProfile + ")");
+            if (item.ForumProfile.Contains("waze.com"))
+                sr.AppendLine("[Forum Profile](" + item.ForumProfile + ")");
+            else
+                sr.AppendLine(item.ForumProfile);
+            if (item.WikiProfile.Contains("waze.com"))
+                sr.AppendLine("[Wiki Profile](" + item.WikiProfile + ")");
+            else
+                sr.AppendLine(item.WikiProfile);
             var embed = new EmbedBuilder()
             {
                 Color = new Color(147, 196, 211),
