@@ -8,6 +8,7 @@ using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Outreach;
 using WazeBotDiscord.Utilities;
 using WazeBotDiscord.Glossary;
+using WazeBotDiscord.Keywords;
 
 namespace WazeBotDiscord.Modules
 {
@@ -22,9 +23,10 @@ namespace WazeBotDiscord.Modules
         readonly AutoreplyService _autoreplySvc;
         readonly OutreachService _outreachSvc;
         readonly GlossaryService _glossarySvc;
+        readonly KeywordService _keywordSvc;
 
         public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc, ScriptsService scriptsSvc, ServerJoinService serverJoinSvc, AutoreplyService autoreplySvc, OutreachService outreachSvc,
-            GlossaryService glossarySvc)
+            GlossaryService glossarySvc, KeywordService keywordSvc)
         {
             _twitterSvc = twitterSvc;
             _lookupSvc = lookupSvc;
@@ -33,12 +35,13 @@ namespace WazeBotDiscord.Modules
             _autoreplySvc = autoreplySvc;
             _outreachSvc = outreachSvc;
             _glossarySvc = glossarySvc;
+            _keywordSvc = keywordSvc;
         }
 
         [Command()]
         public async Task AvailableModules()
         {
-            await ReplyAsync("Modules available to reload: twitter, lookup, outreach, serverjoin, autoreplies, glossary");
+            await ReplyAsync("Modules available to reload: twitter, lookup, outreach, serverjoin, autoreplies, glossary, keywords");
         }
 
         [Command("twitter")]
@@ -83,6 +86,13 @@ namespace WazeBotDiscord.Modules
         {
             await _glossarySvc.ReloadGlossaryAsync();
             await ReplyAsync("Glossary reloaded.");
+        }
+
+        [Command("keywords")]
+        public async Task ReloadKeywords()
+        {
+            await _keywordSvc.ReloadKeywordsAsync();
+            await ReplyAsync("Keywords reloaded.");
         }
     }
 }

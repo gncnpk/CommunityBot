@@ -528,6 +528,14 @@ namespace WazeBotDiscord.Keywords
         {
             return (keyword.StartsWith("/") && (keyword.EndsWith("/") || keyword.EndsWith("/i")));
         }
+
+        public async Task ReloadKeywordsAsync()
+        {
+            _keywords.Clear();
+            _mutedChannels.Clear();
+            _mutedGuilds.Clear();
+            await InitKeywordServiceAsync();
+        }
     }
 
     public enum IgnoreResult

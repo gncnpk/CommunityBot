@@ -175,7 +175,7 @@ namespace WazeBotDiscord.Keywords
                 {
                     case IgnoreResult.Success:
                         await ReplyAsync($"{Context.Message.Author.Mention}: " +
-                            $"Ignored keyword {keyword} in server {guild.Name}.");
+                            $"Ignored keyword `{keyword}` in server {guild.Name}.");
                         break;
 
                     case IgnoreResult.AlreadyIgnored:
@@ -222,7 +222,7 @@ namespace WazeBotDiscord.Keywords
                 {
                     case IgnoreResult.Success:
                         await ReplyAsync($"{Context.Message.Author.Mention}: " +
-                            $"Ignored keyword {keyword} in channel {channel.Mention} (server {channel.Guild.Name}).");
+                            $"Ignored keyword `{keyword}` in channel {channel.Mention} (server {channel.Guild.Name}).");
                         break;
 
                     case IgnoreResult.AlreadyIgnored:
@@ -255,7 +255,7 @@ namespace WazeBotDiscord.Keywords
                         if (k.IgnoredChannels.Count > 0 || k.IgnoredGuilds.Count > 0) {
                             if(reply.Length > 0)
                                 reply.Append("\n"); //need an extra new line to space out the list
-                            reply.Append($"**{k.Keyword}**");
+                            reply.Append($"`{k.Keyword}`");
                             if (k.IgnoredChannels.Count > 0)
                             {
                                 reply.Append($"\nIgnored Channels: ");
