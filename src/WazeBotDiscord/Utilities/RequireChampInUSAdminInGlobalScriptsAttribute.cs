@@ -25,7 +25,7 @@ namespace WazeBotDiscord.Utilities
                 if (((SocketGuildUser)context.Message.Author).Roles.Contains(adminRole))
                     return PreconditionResult.FromSuccess();
 
-                return PreconditionResult.FromError("You must be an admin on this server to use that command.");
+                return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be an admin on this server to use that command.");
             }
             else
             {
@@ -52,7 +52,7 @@ namespace WazeBotDiscord.Utilities
 
 
 
-                return PreconditionResult.FromError("You must be a champ or above on this server to use that command.");
+                return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be a champ or above on this server to use that command.");
             }
 
         }

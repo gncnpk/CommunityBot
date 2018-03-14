@@ -28,9 +28,9 @@ namespace WazeBotDiscord.Utilities
                 return PreconditionResult.FromSuccess();
 
             if(context.Guild.Id == 347386780074377217) //if on Global, must be admin
-                return PreconditionResult.FromError("You must be admin to use that command.");
+                return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be admin to use that command.");
             else
-                return PreconditionResult.FromError("You must be SM or above to use that command.");
+                return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be SM or above to use that command.");
         }
     }
 }

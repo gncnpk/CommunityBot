@@ -262,3 +262,4 @@ __pycache__/
 *.pyc
 /src/WazeBotDiscord/Properties/launchSettings.json
 *.ide
+src/WazeBotDiscord/Keywords/KeywordCommands.cs

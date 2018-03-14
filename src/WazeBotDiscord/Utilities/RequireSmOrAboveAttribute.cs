@@ -25,7 +25,7 @@ namespace WazeBotDiscord.Utilities
             if (((SocketGuildUser)context.Message.Author).Hierarchy >= cmRole.Position)
                 return PreconditionResult.FromSuccess();
 
-            return PreconditionResult.FromError("You must be SM or above to use that command.");
+            return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be SM or above to use that command.");
         }
     }
 }

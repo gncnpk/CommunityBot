@@ -21,7 +21,7 @@ namespace WazeBotDiscord.Utilities
             if (((SocketGuildUser)context.Message.Author).Roles.Any(r => r.Id == 300494132839841792 || r.Id == 300494182403801088))
                 return PreconditionResult.FromSuccess();
 
-            return PreconditionResult.FromError("You must be a champ to use that command.");
+            return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be a champ to use that command.");
         }
     }
 }

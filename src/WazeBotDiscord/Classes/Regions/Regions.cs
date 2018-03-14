@@ -16,5 +16,6 @@
         public const ulong CommunityTest = 360595895965843456;
         public const ulong WazeScripts = 347019166655709184;
         public const ulong GlobalMapraid = 347386780074377217;
+        public const ulong VEOC = 356076662812573698;
     }
 }

@@ -25,7 +25,7 @@ namespace WazeBotDiscord.Utilities
             if (((SocketGuildUser)context.Message.Author).Hierarchy >= adminRole.Position)
                 return PreconditionResult.FromSuccess();
 
-            return PreconditionResult.FromError("You must be an administrator to use that command.");
+            return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be an administrator to use that command.");
         }
     }
 }

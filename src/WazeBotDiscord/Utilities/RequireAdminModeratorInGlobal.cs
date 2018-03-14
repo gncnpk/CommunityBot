@@ -4,10 +4,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WazeBotDiscord.Classes.Roles;
+using WazeBotDiscord.Classes.Servers;
 
 namespace WazeBotDiscord.Utilities
 {
-    class RequireAdminInGlobal : PreconditionAttribute
+    class RequireAdminModeratorInGlobal : PreconditionAttribute
     {
         public async override Task<PreconditionResult> CheckPermissions(
             ICommandContext context, CommandInfo command, IServiceProvider services)
@@ -16,11 +17,11 @@ namespace WazeBotDiscord.Utilities
             if (appInfo.Owner.Id == context.User.Id)
                 return PreconditionResult.FromSuccess();
 
-            if (context.Guild.Id != 347386780074377217) //Global server
+            if (context.Guild.Id != Servers.GlobalMapraid) //Global server
                 return PreconditionResult.FromError("That command can only be used on the global server.");
 
             //Global server and Admin
-            if ((context.Guild.Id == 347386780074377217 && ((SocketGuildUser)context.Message.Author).Roles.Any(r => (r.Id == Admin.Ids[347386780074377217]))))
+            if ((context.Guild.Id == Servers.GlobalMapraid && ((SocketGuildUser)context.Message.Author).Roles.Any(r => (r.Id == Admin.Ids[Servers.GlobalMapraid] || r.Id == Moderator.Ids[Servers.GlobalMapraid]))))
                 return PreconditionResult.FromSuccess();
 
             return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be an admin to use that command.");

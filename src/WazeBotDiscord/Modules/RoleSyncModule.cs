@@ -66,7 +66,7 @@ namespace WazeBotDiscord.Modules
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Removed SM.");
             }
         }
-
+        
         [Command("lam", RunMode = RunMode.Async)]
         [Alias("largeareamanager")]
         [RequireSmOrAbove]
@@ -352,7 +352,7 @@ namespace WazeBotDiscord.Modules
 
         bool IsSelf(IUser target)
         {
-            return Context.Message.Author == target && Context.Message.Author.Id != 132714099241910273;
+            return Context.Message.Author == target;
         }
     }
 }
