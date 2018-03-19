@@ -25,7 +25,7 @@ namespace WazeBotDiscord.Utilities
                 return PreconditionResult.FromSuccess();
 
             //Check if L6 on global server
-            if (context.Guild.Id == Servers.GlobalMapraid && (((SocketGuildUser)context.Message.Author).Roles.Any(r => r.Id == Admin.Ids[Servers.GlobalMapraid])))
+            if (context.Guild.Id == Servers.GlobalMapraid && (((SocketGuildUser)context.Message.Author).Roles.Any(r => r.Id == Level6.Ids[Servers.GlobalMapraid])))
                 return PreconditionResult.FromSuccess();
 
             if (context.Guild.Id == Servers.National)
