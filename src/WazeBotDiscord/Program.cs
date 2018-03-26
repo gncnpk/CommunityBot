@@ -20,6 +20,7 @@ using WazeBotDiscord.DND;
 using WazeBotDiscord.Announce;
 using WazeBotDiscord.ServerJoin;
 using WazeBotDiscord.Wikisearch;
+using WazeBotDiscord.Abbreviation;
 
 namespace WazeBotDiscord
 {
@@ -96,6 +97,9 @@ namespace WazeBotDiscord
 
             var wikisearchService = new WikisearchService();
 
+            var abbreviationService = new AbbreviationService(httpClient);
+
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(autoreplyService);
@@ -111,6 +115,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(announceService);
             serviceCollection.AddSingleton(serverJoinService);
             serviceCollection.AddSingleton(wikisearchService);
+            serviceCollection.AddSingleton(abbreviationService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
@@ -194,6 +199,10 @@ namespace WazeBotDiscord
         {
             if (Environment.GetEnvironmentVariable("WAZEBOT_DB_CONNECTIONSTRING") == null)
                 throw new ArgumentNullException("DB connection string env var not found", innerException: null);
+            if (Environment.GetEnvironmentVariable("COMMUNITYBOT_WAZE_LOGIN") == null)
+                throw new ArgumentNullException("Waze account login not found", innerException: null);
+            if (Environment.GetEnvironmentVariable("COMMUNITYBOT_WAZE_PASSWORD") == null)
+                throw new ArgumentNullException("Waze account password not found", innerException: null);
             /*
             if (Environment.GetEnvironmentVariable("TWITTER_CONSUMER_KEY") == null)
                 throw new ArgumentNullException("Twitter consumer key env var not found", innerException: null);

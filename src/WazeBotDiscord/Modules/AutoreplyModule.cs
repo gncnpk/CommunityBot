@@ -85,7 +85,7 @@ namespace WazeBotDiscord.Modules
 
                 if (trigger.Length > 30)
                 {
-                    await ReplyAsync("Trigger is too long.");
+                    await ReplyAsync("Trigger is too long. Trigger must be <= 30 characters.");
                     return;
                 }
 
@@ -127,7 +127,7 @@ namespace WazeBotDiscord.Modules
 
                 if (trigger.Length > 30)
                 {
-                    await ReplyAsync("Trigger is too long.");
+                    await ReplyAsync("Trigger is too long. Trigger must be <= 30 characters.");
                     return;
                 }
 
@@ -169,7 +169,7 @@ namespace WazeBotDiscord.Modules
 
                 if (trigger.Length > 30)
                 {
-                    await ReplyAsync("Trigger is too long.");
+                    await ReplyAsync("Trigger is too long. Trigger must be <= 30 characters.");
                     return;
                 }
 
