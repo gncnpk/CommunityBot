@@ -203,7 +203,7 @@ namespace WazeBotDiscord
                 throw new ArgumentNullException("Waze account login not found", innerException: null);
             if (Environment.GetEnvironmentVariable("COMMUNITYBOT_WAZE_PASSWORD") == null)
                 throw new ArgumentNullException("Waze account password not found", innerException: null);
-            /*
+            
             if (Environment.GetEnvironmentVariable("TWITTER_CONSUMER_KEY") == null)
                 throw new ArgumentNullException("Twitter consumer key env var not found", innerException: null);
 
@@ -214,7 +214,7 @@ namespace WazeBotDiscord
                 throw new ArgumentNullException("Twitter access token env var not found", innerException: null);
 
             if (Environment.GetEnvironmentVariable("TWITTER_ACCESS_TOKEN_SECRET") == null)
-                throw new ArgumentNullException("Twitter access token secret env var not found", innerException: null);*/
+                throw new ArgumentNullException("Twitter access token secret env var not found", innerException: null);
         }
     }
 }
