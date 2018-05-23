@@ -122,13 +122,14 @@ namespace WazeBotDiscord.Scripts
                 //result.AppendLine("```");
             }
             string resultString = result.ToString();
-            Regex regURL = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
+            Regex regURL = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)");
             Match matchNA = regURL.Match(resultString);
             foreach (Match itemMatch in regURL.Matches(resultString))
             {
                 resultString = resultString.Replace(itemMatch.ToString(), "<" + itemMatch.ToString() + ">");
             }
-
+            resultString = Regex.Replace(resultString, "<{2,}","<");
+            resultString = Regex.Replace(resultString, ">{2,}", ">");
             return resultString;
         }
 
