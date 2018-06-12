@@ -9,6 +9,23 @@ namespace WazeBotDiscord.Modules
 {
     public class RoleNoSyncModule : ModuleBase
     {
+        [Command("worldcup", RunMode = RunMode.Async)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        public async Task ToggleWorldCup()
+        {
+            var msg = await ReplyAsync($"{Context.Message.Author.Mention}: Just a moment...");
+            var result = await RoleAssignmentHelper.ToggleRoleAsync(Context.Message.Author, WorldCup.Ids, Context);
+
+            if (result == SyncedRoleStatus.Added)
+            {
+                await msg.ModifyAsync(m => m.Content = $"{Context.Message.Author.Mention}: Added worldcup role.");
+            }
+            else if (result == SyncedRoleStatus.Removed)
+            {
+                await msg.ModifyAsync(m => m.Content = $"{Context.Message.Author.Mention}: Removed worldcup role.");
+            }
+        }
+
         [Command("iosbeta", RunMode = RunMode.Async)]
         [RequireAdminModeratorInGlobal]
         [RequireBotPermission(GuildPermission.ManageRoles)]
