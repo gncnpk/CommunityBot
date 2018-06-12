@@ -18,7 +18,7 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await msg.ModifyAsync(m => m.Content = $"{Context.Message.Author.Mention}: Added worldcup role.");
+                await msg.ModifyAsync(m => m.Content = $"{Context.Message.Author.Mention}: Added worldcup role.  Join the discussion in <#448908730243743754>");
             }
             else if (result == SyncedRoleStatus.Removed)
             {
