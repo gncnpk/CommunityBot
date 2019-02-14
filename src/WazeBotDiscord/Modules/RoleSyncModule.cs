@@ -11,7 +11,8 @@ namespace WazeBotDiscord.Modules
     {
         [Command("cm", RunMode = RunMode.Async)]
         [Alias("countrymanager")]
-        [RequireCmOrAbove]
+        //[RequireCmOrAbove]
+        [RequireOwner]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleCm(IUser user)
         {
@@ -23,12 +24,33 @@ namespace WazeBotDiscord.Modules
 
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
 
-            var result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, CountryManager.Ids, Context);
+            //wait ReplyAsync("");
+            SyncedRoleStatus result = SyncedRoleStatus.NotConfigured;
+            try { 
+                result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, CountryManager.Ids, Context);
+             }
+            catch {
+                await ReplyAsync("Error setting CM role on this server");
+            }
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
+                try
+                {
+                    await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
+                }
+                catch
+                {
+                    await ReplyAsync("Error removing LAM role");
+                }
+                try
+                {
+                    await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
+                }
+                catch
+                {
+                    await ReplyAsync("Error removing AM role");
+                }
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added CM, removed LAM and AM (if applicable).");
             }
