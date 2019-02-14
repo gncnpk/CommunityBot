@@ -11,7 +11,8 @@ namespace WazeBotDiscord.Modules
     {
         [Command("cm", RunMode = RunMode.Async)]
         [Alias("countrymanager")]
-        [RequireCmOrAbove]
+        //[RequireCmOrAbove]
+        [RequireOwner]
         [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task ToggleCm(IUser user)
         {
@@ -23,12 +24,33 @@ namespace WazeBotDiscord.Modules
 
             var msg = await ReplyAsync($"{user.Mention}: Just a moment...");
 
-            var result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, CountryManager.Ids, Context);
+            //wait ReplyAsync("");
+            SyncedRoleStatus result = SyncedRoleStatus.NotConfigured;
+            try { 
+                result = await RoleSyncHelpers.ToggleSyncedRolesAsync(user, CountryManager.Ids, Context);
+             }
+            catch {
+                await ReplyAsync("Error setting CM role on this server");
+            }
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
+                try
+                {
+                    await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context);
+                }
+                catch
+                {
+                    await ReplyAsync("Error removing LAM role");
+                }
+                try
+                {
+                    await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context);
+                }
+                catch
+                {
+                    await ReplyAsync("Error removing AM role");
+                }
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added CM, removed LAM and AM (if applicable).");
             }
@@ -56,8 +78,8 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added SM, removed LAM and AM (if applicable).");
             }
@@ -85,8 +107,8 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, StateManager.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, StateManager.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context);
 
                 // some guilds have LAM and AM, some only have AM. have to do this to manage that.
                 await RoleSyncHelpers.AddSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
@@ -117,8 +139,8 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, StateManager.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, StateManager.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, LargeAreaManager.Ids, Context);
 
                 // some guilds have LAM and AM, some only have AM. have to do this to manage that.
                 await RoleSyncHelpers.AddSyncedRolesAsync((SocketGuildUser)user, AreaManager.Ids, Context.Client);
@@ -170,11 +192,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L6, removed other level roles.");
             }
@@ -202,11 +224,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L5, removed other level roles.");
             }
@@ -234,11 +256,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L4, removed other level roles.");
             }
@@ -268,11 +290,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L3, removed other level roles.");
             }
@@ -302,11 +324,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level1.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L2, removed other level roles.");
             }
@@ -336,11 +358,11 @@ namespace WazeBotDiscord.Modules
 
             if (result == SyncedRoleStatus.Added)
             {
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context.Client);
-                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context.Client);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level6.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level5.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level4.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level3.Ids, Context);
+                await RoleSyncHelpers.RemoveSyncedRolesAsync((SocketGuildUser)user, Level2.Ids, Context);
 
                 await msg.ModifyAsync(m => m.Content = $"{user.Mention}: Added L1, removed other level roles.");
             }
