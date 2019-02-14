@@ -57,7 +57,7 @@ namespace WazeBotDiscord.Utilities
                 }
                 catch
                 {
-                    await context.Channel.SendMessageAsync($"Error removing {roleId} from {guild.Id}");
+                    await context.Channel.SendMessageAsync($"Error removing {roleId} from {guild.Id} ({guild.Name})");
                 }
             }
         }
