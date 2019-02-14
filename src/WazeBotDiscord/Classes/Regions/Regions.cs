@@ -17,5 +17,6 @@
         public const ulong WazeScripts = 347019166655709184;
         public const ulong GlobalMapraid = 347386780074377217;
         public const ulong VEOC = 356076662812573698;
+        public const ulong ATR = 352258352417603587;
     }
 }
