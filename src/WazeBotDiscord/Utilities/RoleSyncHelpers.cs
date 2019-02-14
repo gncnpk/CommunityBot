@@ -26,7 +26,7 @@ namespace WazeBotDiscord.Utilities
 
             if (user.Roles.Contains(role))
             {
-                await RemoveSyncedRolesAsync(user, guildRoles, context.Client);
+                await RemoveSyncedRolesAsync(user, guildRoles, context);
                 return SyncedRoleStatus.Removed;
             }
             else
@@ -39,18 +39,26 @@ namespace WazeBotDiscord.Utilities
         public static async Task RemoveSyncedRolesAsync(
             SocketGuildUser guildUser,
             IReadOnlyDictionary<ulong, ulong> guildRole,
-            IDiscordClient client)
+            ICommandContext context)
         {
-            foreach (var guild in await GetUserGuildsAsync(guildUser, client))
+            foreach (var guild in await GetUserGuildsAsync(guildUser, context.Client))
             {
-                var exists = guildRole.TryGetValue(guild.Id, out var roleId);
-                if (!exists)
-                    continue;
+                ulong roleId = 0;
+                try
+                {
+                    var exists = guildRole.TryGetValue(guild.Id, out roleId);
+                    if (!exists)
+                        continue;
 
-                var role = guild.GetRole(roleId);
-                var thisGuildUser = guild.GetUser(guildUser.Id);
+                    var role = guild.GetRole(roleId);
+                    var thisGuildUser = guild.GetUser(guildUser.Id);
 
-                await thisGuildUser.RemoveRoleAsync(role);
+                    await thisGuildUser.RemoveRoleAsync(role);
+                }
+                catch
+                {
+                    await context.Channel.SendMessageAsync($"Error removing {roleId} from {guild.Id}");
+                }
             }
         }
 
