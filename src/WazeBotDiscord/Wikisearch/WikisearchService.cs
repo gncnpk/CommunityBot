@@ -39,7 +39,14 @@ namespace WazeBotDiscord.Wikisearch
                         foreach (var myRow in searchResults)
                         {
                             var row = (IHtmlListItemElement)myRow;
-                            _items.Add(new SearchItem { Title = row.Children[0].Children[0].Attributes["title"].Value , URL = "https://wazeopedia.waze.com" + row.Children[0].Children[0].Attributes["href"].Value });
+                            _items.Add(new SearchItem { Title = row.Children[0].Children[0].Attributes["title"].Value, URL = "https://wazeopedia.waze.com" + row.Children[0].Children[0].Attributes["href"].Value });
+                        }
+                    }
+                    else
+                    {
+                        if (doc.ContentType == "text/html") {
+                            _items.Add(new SearchItem { Title = doc.Title.Replace(" - Wazeopedia", ""), URL = "https://wazeopedia.waze.com" + ((IHtmlAnchorElement)doc.QuerySelectorAll("#ca-main a")[0]).Href.Replace(@"about://", "") });
+                        //((AngleSharp.Dom.Html.HtmlUrlBaseElement)doc.QuerySelectorAll("#ca-main a")[0]).Href
                         }
                     }
                 }
