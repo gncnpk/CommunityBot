@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace WazeBotDiscord.ChannelSync
 {
-    class ChannelSyncService
+    public class ChannelSyncService
     {
-        readonly HttpClient _client;
         List<SyncChannelsRow> _syncdChannels;
 
         public ChannelSyncService()
@@ -30,6 +29,12 @@ namespace WazeBotDiscord.ChannelSync
         public SyncChannelsRow getSyncChannels(ulong channel) 
         {
             return _syncdChannels.Find(c => c.Channel1 == channel || c.Channel2 == channel);
+        }
+
+        public async Task ReloadChannelSyncAsync()
+        {
+            _syncdChannels.Clear();
+            await InitAsync();
         }
     }
 }

@@ -9,6 +9,7 @@ using WazeBotDiscord.Outreach;
 using WazeBotDiscord.Utilities;
 using WazeBotDiscord.Glossary;
 using WazeBotDiscord.Keywords;
+using WazeBotDiscord.ChannelSync;
 
 namespace WazeBotDiscord.Modules
 {
@@ -24,9 +25,10 @@ namespace WazeBotDiscord.Modules
         readonly OutreachService _outreachSvc;
         readonly GlossaryService _glossarySvc;
         readonly KeywordService _keywordSvc;
+        readonly ChannelSyncService _channelSyncSvc;
 
         public ReloadModule(TwitterService twitterSvc, LookupService lookupSvc, ScriptsService scriptsSvc, ServerJoinService serverJoinSvc, AutoreplyService autoreplySvc, OutreachService outreachSvc,
-            GlossaryService glossarySvc, KeywordService keywordSvc)
+            GlossaryService glossarySvc, KeywordService keywordSvc, ChannelSyncService channelsyncSvc)
         {
             _twitterSvc = twitterSvc;
             _lookupSvc = lookupSvc;
@@ -36,6 +38,7 @@ namespace WazeBotDiscord.Modules
             _outreachSvc = outreachSvc;
             _glossarySvc = glossarySvc;
             _keywordSvc = keywordSvc;
+            _channelSyncSvc = channelsyncSvc;
         }
 
         [Command()]
@@ -93,6 +96,13 @@ namespace WazeBotDiscord.Modules
         {
             await _keywordSvc.ReloadKeywordsAsync();
             await ReplyAsync("Keywords reloaded.");
+        }
+
+        [Command("channelsync")]
+        public async Task ReloadChannelSync()
+        {
+            await _channelSyncSvc.ReloadChannelSyncAsync();
+            await ReplyAsync("Channel sync records reloaded.");
         }
     }
 }
