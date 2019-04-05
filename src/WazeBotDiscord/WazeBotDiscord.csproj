@@ -15,10 +15,17 @@
     <PackageReference Include="Discord.Net.Modules" Version="0.9.6" />
     <PackageReference Include="Discord.Net.Rest" Version="1.0.2" />
     <PackageReference Include="Discord.Net.WebSocket" Version="1.0.2" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.29.1.988" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="SapientGuardian.EntityFrameworkCore.MySql" Version="7.1.23" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
     <PackageReference Include="TweetinviAPI" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="client_secret.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

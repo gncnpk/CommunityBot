@@ -11,6 +11,7 @@ using WazeBotDiscord.ServerLeave;
 using WazeBotDiscord.DND;
 using WazeBotDiscord.Announce;
 using WazeBotDiscord.ServerJoin;
+using WazeBotDiscord.ChannelSync;
 
 namespace WazeBotDiscord
 {
@@ -27,6 +28,7 @@ namespace WazeBotDiscord
         public DbSet<DNDListItem> DndList { get; set; }
         public DbSet<AnnounceChannel> AnnounceList { get; set; }
         public DbSet<ServerJoinRecord> ServerJoinRecords { get; set; }
+        public DbSet<SyncChannelsRow> SyncChannels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -173,6 +175,16 @@ namespace WazeBotDiscord
                 e.Property(g => g.UserId).HasColumnName("user_id");
                 e.Property(g => g.GuildId).HasColumnName("guild_id");
             });
+
+            modelBuilder.Entity<SyncChannelsRow>(e =>
+           {
+               e.ToTable("sync_channels");
+               e.HasKey(r => r.Id);
+               e.Property(r => r.Channel1).HasColumnName("channel1").IsRequired();
+               e.Property(r => r.Channel2).HasColumnName("channel2").IsRequired();
+               e.Property(r => r.AddedById).HasColumnName("added_by_id").IsRequired();
+               e.Property(r => r.AddedAt).HasColumnName("added_at").IsRequired();
+           });
         }
     }
 }

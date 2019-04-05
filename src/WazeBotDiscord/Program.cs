@@ -21,6 +21,7 @@ using WazeBotDiscord.Announce;
 using WazeBotDiscord.ServerJoin;
 using WazeBotDiscord.Wikisearch;
 using WazeBotDiscord.Abbreviation;
+using WazeBotDiscord.ChannelSync;
 
 namespace WazeBotDiscord
 {
@@ -99,6 +100,9 @@ namespace WazeBotDiscord
 
             var abbreviationService = new AbbreviationService(httpClient);
 
+            var channelSyncService = new ChannelSyncService();
+            await channelSyncService.InitAsync();
+
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -116,6 +120,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(serverJoinService);
             serviceCollection.AddSingleton(wikisearchService);
             serviceCollection.AddSingleton(abbreviationService);
+            serviceCollection.AddSingleton(channelSyncService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
@@ -137,6 +142,9 @@ namespace WazeBotDiscord
 
             client.MessageReceived += async (SocketMessage msg) =>
                 await KeywordHandler.HandleKeywordAsync(msg, keywordService, client, dndService);
+
+            client.MessageReceived += async (SocketMessage msg) =>
+                await ChannelSyncHandler.HandleChannelSyncAsync(msg, channelSyncService, client);
 
             client.UserJoined += async (SocketGuildUser user) => await UserJoinedRoleSyncEvent.SyncRoles(user, client);
             client.UserLeft += async (SocketGuildUser user) => await UserLeftEvent.Alert(user, client, serverLeaveService);
