@@ -184,6 +184,7 @@ namespace WazeBotDiscord
                e.Property(r => r.Channel2).HasColumnName("channel2").IsRequired();
                e.Property(r => r.AddedById).HasColumnName("added_by_id").IsRequired();
                e.Property(r => r.AddedAt).HasColumnName("added_at").IsRequired();
+               e.Property(r => r.AddedByName).HasColumnName("added_by_name").IsRequired();
            });
         }
     }

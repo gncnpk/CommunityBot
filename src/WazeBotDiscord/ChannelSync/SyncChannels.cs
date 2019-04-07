@@ -15,5 +15,7 @@ namespace WazeBotDiscord.ChannelSync
         public ulong AddedById { get; set; }
 
         public int Id { get; set; }
+
+        public string AddedByName { get; set; }
     }
 }
