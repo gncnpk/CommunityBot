@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WazeBotDiscord.Classes.Servers;
 
 namespace WazeBotDiscord.Scripts
 {
@@ -38,17 +39,13 @@ namespace WazeBotDiscord.Scripts
             return $"<https://docs.google.com/spreadsheets/u/1/d/1yrEZMrQyMjhgBAJuNj7Y8z0GxdKWgIEkHIQBhUM2H9k>";
         }
 
-        public async Task<string> SearchSheetAsync( string origSearchString)
+        public async Task<string> SearchSheetAsync( string origSearchString, ulong guildID)
         {
             var searchString = origSearchString.ToLowerInvariant();
             var parser = new HtmlParser();
 
             string sheetURL = $"https://docs.google.com/spreadsheets/u/1/d/1yrEZMrQyMjhgBAJuNj7Y8z0GxdKWgIEkHIQBhUM2H9k/pubhtml";
             var resp = await _client.GetAsync(sheetURL);
-
-            //if (!resp.IsSuccessStatusCode)
-            //    return "Spreadsheet is not configured correctly.";
-
             var doc = await parser.ParseAsync(await resp.Content.ReadAsStringAsync());
 
             var tblHeader = doc.QuerySelectorAll("table.waffle > tbody > tr:first-of-type");
@@ -70,12 +67,17 @@ namespace WazeBotDiscord.Scripts
                 var row = (IHtmlTableRowElement)thisRow;
                 var match = false;
 
-                foreach (var cell in row.Cells)
+                string[] restrictedGuilds = row.Cells[7].TextContent.Split(",");
+                
+                if (restrictedGuilds.Length == 0 || Array.Exists(restrictedGuilds, element => element == guildID.ToString()) || guildID == Servers.WazeScripts) //If the restricted regions is blank, or the server the command was run on is in the list, allow returning that script.  All scripts allowed to return on the script server
                 {
-                    if (cell.TextContent.ToLowerInvariant().Replace("-", " ").Contains(searchString.Replace("-"," ")))
+                    foreach (var cell in row.Cells)
                     {
-                        match = true;
-                        break;
+                        if (cell.TextContent.ToLowerInvariant().Replace("-", " ").Contains(searchString.Replace("-", " ")))
+                        {
+                            match = true;
+                            break;
+                        }
                     }
                 }
 
@@ -107,7 +109,7 @@ namespace WazeBotDiscord.Scripts
             {
                 //result.AppendLine("```");
 
-                for (var j = 1; j < matches[i].Count - 1; j++)
+                for (var j = 1; j < matches[i].Count - 2; j++)
                 {
                     if (string.IsNullOrWhiteSpace(matches[i][j]))
                         continue;
