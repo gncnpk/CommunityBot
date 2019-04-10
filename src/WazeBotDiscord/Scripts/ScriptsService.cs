@@ -68,8 +68,11 @@ namespace WazeBotDiscord.Scripts
                 var match = false;
 
                 string[] restrictedGuilds = row.Cells[7].TextContent.Split(",");
-                
-                if (restrictedGuilds.Length == 0 || Array.Exists(restrictedGuilds, element => element == guildID.ToString()) || guildID == Servers.WazeScripts) //If the restricted regions is blank, or the server the command was run on is in the list, allow returning that script.  All scripts allowed to return on the script server
+                bool hasRestrictedGuilds = (restrictedGuilds.Length >= 1 && restrictedGuilds[0].Trim() != "");
+
+                //If any script is set to be restricted, do not return it when querying in a DM with the bot
+                //If the restricted regions is blank, or the server the command was run on is in the list, allow returning that script.  All scripts allowed to return on the script server
+                if (!(hasRestrictedGuilds && guildID == 0) || !hasRestrictedGuilds || guildID == Servers.WazeScripts || (hasRestrictedGuilds && Array.Exists(restrictedGuilds, element => element == guildID.ToString())))
                 {
                     foreach (var cell in row.Cells)
                     {

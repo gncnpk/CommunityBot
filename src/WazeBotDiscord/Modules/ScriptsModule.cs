@@ -31,7 +31,7 @@ namespace WazeBotDiscord.Modules
                 return;
             }
 
-            await ReplyAsync(await _scriptsService.SearchSheetAsync(searchString, Context.Guild.Id));
+            await ReplyAsync(await _scriptsService.SearchSheetAsync(searchString, Context.Guild != null ? Context.Guild.Id : 0));
         }
     }
 }
