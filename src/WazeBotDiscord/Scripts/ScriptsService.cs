@@ -67,7 +67,7 @@ namespace WazeBotDiscord.Scripts
                 var row = (IHtmlTableRowElement)thisRow;
                 var match = false;
 
-                string[] restrictedGuilds = row.Cells[7].TextContent.Split(",");
+                string[] restrictedGuilds = row.Cells[8].TextContent.Split(",");
                 bool hasRestrictedGuilds = (restrictedGuilds.Length >= 1 && restrictedGuilds[0].Trim() != "");
 
                 //If any script is set to be restricted, do not return it when querying in a DM with the bot
