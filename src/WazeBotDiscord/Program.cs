@@ -22,6 +22,7 @@ using WazeBotDiscord.ServerJoin;
 using WazeBotDiscord.Wikisearch;
 using WazeBotDiscord.Abbreviation;
 using WazeBotDiscord.ChannelSync;
+using WazeBotDiscord.Find;
 
 namespace WazeBotDiscord
 {
@@ -103,6 +104,8 @@ namespace WazeBotDiscord
             var channelSyncService = new ChannelSyncService();
             await channelSyncService.InitAsync();
 
+            var findService = new FindService();
+
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -121,6 +124,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(wikisearchService);
             serviceCollection.AddSingleton(abbreviationService);
             serviceCollection.AddSingleton(channelSyncService);
+            serviceCollection.AddSingleton(findService);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 
