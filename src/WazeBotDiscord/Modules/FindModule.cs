@@ -84,7 +84,7 @@ namespace WazeBotDiscord.Modules
 
         public class Users
         {
-            public List<string> objects { get; set; }
+            public List<User> objects { get; set; }
         }
 
         public class EditArea
@@ -121,6 +121,13 @@ namespace WazeBotDiscord.Modules
         {
             public string type { get; set; }
             public List<double> coordinates { get; set; }
+        }
+
+        public class User
+        {
+            public int id { get; set; }
+            public string userName { get; set; }
+            public int rank { get; set; }
         }
         #endregion
     }
