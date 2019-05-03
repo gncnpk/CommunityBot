@@ -71,33 +71,54 @@ namespace WazeBotDiscord.Modules
             Regex regURL = new Regex(@"^\d*\.\d*.\d*");
             if (regURL.Matches(placeID).Count == 1)
             {
-                string urlNA = "https://www.waze.com/SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
-                var result = _findSvc.GetWebRequest(urlNA, "application/json; charset=utf-8").Result;
-                PlaceResponse PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
+                PlaceResponse PlaceResult;
                 StringBuilder reply = new StringBuilder();
-
-                if (PlaceResult.venue != null)
+                try
                 {
-                    GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
-                    reply.AppendLine($"<https://www.waze.com/en-US/editor/?env=usa&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    string urlNA = "https://www.waze.com/SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
+                    var result = _findSvc.GetWebRequest(urlNA, "application/json; charset=utf-8").Result;
+                    PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
+                    if (PlaceResult.venue != null)
+                    {
+                        GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
+                        reply.AppendLine($"<https://www.waze.com/en-US/editor/?env=usa&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    }
+                }
+                catch(Exception ex)
+                {
+
                 }
 
-                string urlROW = "https://www.waze.com/row-SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
-                result = _findSvc.GetWebRequest(urlROW, "application/json; charset=utf-8").Result;
-                PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
-                if (PlaceResult.venue != null)
+                try
                 {
-                    GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
-                    reply.AppendLine($"<https://www.waze.com/editor/?env=row&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    string urlROW = "https://www.waze.com/row-SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
+                    var result = _findSvc.GetWebRequest(urlROW, "application/json; charset=utf-8").Result;
+                    PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
+                    if (PlaceResult.venue != null)
+                    {
+                        GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
+                        reply.AppendLine($"<https://www.waze.com/editor/?env=row&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    }
+                }
+                catch(Exception ex)
+                {
+
                 }
 
-                string urlIL = "https://www.waze.com/il-SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
-                result = _findSvc.GetWebRequest(urlIL, "application/json; charset=utf-8").Result;
-                PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
-                if (PlaceResult.venue != null)
+                try
                 {
-                    GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
-                    reply.AppendLine($"<https://www.waze.com/editor/?env=il&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    string urlIL = "https://www.waze.com/il-SearchServer/mozi?max_distance_kms=&lon=-84.22637&lat=39.61097&format=PROTO_JSON_FULL&venue_id=" + placeID.Trim();
+                    var result = _findSvc.GetWebRequest(urlIL, "application/json; charset=utf-8").Result;
+                    PlaceResult = JsonConvert.DeserializeObject<PlaceResponse>(result);
+                    if (PlaceResult.venue != null)
+                    {
+                        GeoPoint centroid = new GeoPoint(PlaceResult.venue.location.x, PlaceResult.venue.location.y);
+                        reply.AppendLine($"<https://www.waze.com/editor/?env=il&lon={centroid.x}&lat={centroid.y}&zoom=6&venues={placeID}>");
+                    }
+                }
+                catch(Exception ex)
+                {
+
                 }
 
                 if (reply.Length > 0)
