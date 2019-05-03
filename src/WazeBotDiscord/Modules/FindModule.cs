@@ -10,6 +10,7 @@ using WazeBotDiscord.Find;
 
 namespace WazeBotDiscord.Modules
 {
+    [Group("find")]
     public class FindModule : ModuleBase
     {
         readonly FindService _findSvc;
@@ -19,16 +20,50 @@ namespace WazeBotDiscord.Modules
             _findSvc = findSvc;
         }
 
-        [Command("find")]
+        [Command("segment")]
         public async Task FindObject([Remainder] string message = null)
         {
-            string url = "https://www.waze.com/Descartes/app/HouseNumbers?ids=" + message.Trim();
-            var result = _findSvc.GetWebRequest(url, "application/json; charset=utf-8").Result;
-            HouseNumberResult HNResult = JsonConvert.DeserializeObject<HouseNumberResult>(result);
-            GeoPoint centroid = _findSvc.GetCentroid(HNResult.editAreas.objects[0].geometry.coordinates[0]);
+            Regex regURL = new Regex(@"^\d{1,10}");
+            if (regURL.Matches(message).Count == 1)
+            {
+                string urlNA = "https://www.waze.com/Descartes/app/HouseNumbers?ids=" + message.Trim();
+                var result = _findSvc.GetWebRequest(urlNA, "application/json; charset=utf-8").Result;
+                HouseNumberResult HNResult = JsonConvert.DeserializeObject<HouseNumberResult>(result);
+                StringBuilder reply = new StringBuilder();
+                if (HNResult.editAreas.objects.Count > 0)
+                {
+                    GeoPoint centroid = _findSvc.GetCentroid(HNResult.editAreas.objects[0].geometry.coordinates[0]);
+                    reply.AppendLine($"<https://www.waze.com/en-US/editor/?env=usa&lon={centroid.x}&lat={centroid.y}&zoom=6&segments={message}>");
+                }
 
-            await (ReplyAsync($"<https://www.waze.com/en-US/editor/?env=usa&lon={centroid.x}&lat={centroid.y}&zoom=6&segments={message}>"));
+                string urlROW = "https://www.waze.com/row-Descartes/app/HouseNumbers?ids=" + message.Trim();
+                result = _findSvc.GetWebRequest(urlROW, "application/json; charset=utf-8").Result;
+                HNResult = JsonConvert.DeserializeObject<HouseNumberResult>(result);
+                if (HNResult.editAreas.objects.Count > 0)
+                {
+                    GeoPoint centroid = _findSvc.GetCentroid(HNResult.editAreas.objects[0].geometry.coordinates[0]);
+                    reply.AppendLine($"<https://www.waze.com/editor/?env=row&lon={centroid.x}&lat={centroid.y}&zoom=6&segments={message}>");
+                }
+
+                string urlIL = "https://www.waze.com/il-Descartes/app/HouseNumbers?ids=" + message.Trim();
+                result = _findSvc.GetWebRequest(urlIL, "application/json; charset=utf-8").Result;
+                HNResult = JsonConvert.DeserializeObject<HouseNumberResult>(result);
+                if (HNResult.editAreas.objects.Count > 0)
+                {
+                    GeoPoint centroid = _findSvc.GetCentroid(HNResult.editAreas.objects[0].geometry.coordinates[0]);
+                    reply.AppendLine($"<https://www.waze.com/editor/?env=il&lon={centroid.x}&lat={centroid.y}&zoom=6&segments={message}>");
+                }
+
+                if (reply.Length > 0)
+                    await ReplyAsync(reply.ToString());
+                else
+                    await ReplyAsync("Segment not found");
+            }
+            else
+                await ReplyAsync("Incorrect segment ID format.");
         }
+
+        #region Helper Classes
 
         public class HouseNumberResult
         {
@@ -87,6 +122,7 @@ namespace WazeBotDiscord.Modules
             public string type { get; set; }
             public List<double> coordinates { get; set; }
         }
+        #endregion
     }
 
 }
