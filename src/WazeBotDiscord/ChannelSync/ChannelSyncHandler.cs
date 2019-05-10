@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System;
 using WazeBotDiscord.ChannelSync;
 using Discord;
+using System.Net;
 
 namespace WazeBotDiscord.ChannelSync
 {
@@ -34,6 +35,15 @@ namespace WazeBotDiscord.ChannelSync
 
                 var myChannel = client.GetChannel(channelToSyncTo) as IMessageChannel;
                 await myChannel.SendMessageAsync("", false, embed);
+                foreach(Attachment attachment in msg.Attachments)
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.DownloadFile(attachment.Url, attachment.Filename);
+                    }
+                    await myChannel.SendFileAsync(attachment.Filename);
+                }
+                
             }
 
         }
