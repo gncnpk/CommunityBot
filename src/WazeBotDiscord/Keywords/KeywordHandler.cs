@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System;
 using WazeBotDiscord.DND;
+using Discord;
 
 namespace WazeBotDiscord.Keywords
 {
@@ -16,6 +17,17 @@ namespace WazeBotDiscord.Keywords
                 return;
 
             var channel = msg.Channel as SocketTextChannel;
+            RegexOptions regOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+            var rtcRegEx = new Regex(@"r\s+t\s+c", regOptions);
+
+            if (rtcRegEx.IsMatch(msg.Content) && (msg.Channel.Id == 300493945731940373 || ((SocketGuildChannel)msg.Channel).Guild.Id == 359327158944137227)) //SM chat or test server
+            {
+                var myChannel = client.GetChannel(msg.Channel.Id) as IMessageChannel;
+                string[] rtcReplies =  { "I think you mean 'RTC'.", "Are you trying to say 'RTC'?", "It seems you are trying to say 'RTC' but your spacebar is interfering."};
+                Random rnd = new Random();
+                int num = rnd.Next(0, rtcReplies.Length);
+                await myChannel.SendMessageAsync(rtcReplies[num], false);
+            }
 
             foreach (var m in service.CheckForKeyword(msg.Content, msg.Author.Id, channel.Guild.Id, channel.Id))
             {
