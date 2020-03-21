@@ -24,7 +24,7 @@ namespace WazeBotDiscord.Modules
         {
             HttpClient httpClient = new HttpClient();
             string body = await httpClient.GetStringAsync("https://status.waze.com/feeds/posts/default");//("https://wazestatus.wordpress.com/category/main/feed");
-            Regex regNA = new Regex(@"<published>(.{29})<\/published><updated>.{29}<\/updated><title type='text'>NA map tiles were successfully updated to: (.*?)<\/title>");//new Regex(" < title>NA map tiles were successfully updated to:(.*?)<\\/title>(.|\\n)*?<pubDate>(.*?) \\+0000<\\/pubDate>");
+            Regex regNA = new Regex(@"<published>(.{29})<\/published><updated>.{29}<\/updated><title type='text'>North American map tiles were successfully updated to: (.*?)<\/title>");//new Regex(" < title>NA map tiles were successfully updated to:(.*?)<\\/title>(.|\\n)*?<pubDate>(.*?) \\+0000<\\/pubDate>");
             Match matchNA = regNA.Match(body);
             Regex regINTL = new Regex(@"<published>(.{29})<\/published><updated>.{29}<\/updated><title type='text'>International map tiles were successfully updated to: (.*?)<\/title>");//new Regex(" < title>INTL map tiles were successfully updated to:(.*?)<\\/title>(.|\\n)*?<pubDate>(.*?) \\+0000<\\/pubDate>");
             Match matchINTL = regINTL.Match(body);
