@@ -37,6 +37,11 @@ namespace WazeBotDiscord.Modules
 
         Embed CreateEmbed(GlossaryItem item)
         {
+            string urlID;
+            if (item.Ids.Count > 0)
+                urlID = item.Ids[0];
+            else
+                urlID = item.Term;
             var embed = new EmbedBuilder()
             {
                 Color = new Color(147, 196, 211),

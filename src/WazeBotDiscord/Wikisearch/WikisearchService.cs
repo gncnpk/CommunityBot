@@ -46,7 +46,6 @@ namespace WazeBotDiscord.Wikisearch
                     {
                         if (doc.ContentType == "text/html") {
                             _items.Add(new SearchItem { Title = doc.Title.Replace(" - Wazeopedia", ""), URL = "https://wazeopedia.waze.com" + ((IHtmlAnchorElement)doc.QuerySelectorAll("#ca-main a")[0]).Href.Replace(@"about://", "") });
-                        //((AngleSharp.Dom.Html.HtmlUrlBaseElement)doc.QuerySelectorAll("#ca-main a")[0]).Href
                         }
                     }
                 }
