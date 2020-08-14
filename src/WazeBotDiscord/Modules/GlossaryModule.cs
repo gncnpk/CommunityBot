@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
 using WazeBotDiscord.Glossary;
@@ -46,7 +46,7 @@ namespace WazeBotDiscord.Modules
             {
                 Color = new Color(147, 196, 211),
                 Title = item.Term,
-                Url = $"https://wazeopedia.waze.com/wiki/USA/Glossary#{item.Ids[0]}",
+                Url = $"https://wazeopedia.waze.com/wiki/USA/Glossary#urlID",
                 Description = item.Description,
 
                 Footer = new EmbedFooterBuilder
