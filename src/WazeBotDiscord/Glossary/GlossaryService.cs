@@ -28,7 +28,7 @@ namespace WazeBotDiscord.Glossary
 
         public GlossaryItem GetGlossaryItem(string term)
         {
-            var item = _items.FirstOrDefault(i => i.Ids.Select(d => d.ToLowerInvariant()).Contains(term));
+            var item = _items.FirstOrDefault(i => i.Ids.Select(d => d.ToLowerInvariant().Replace('_', ' ')).Contains(term));
             if (item != null)
                 return item;
 
