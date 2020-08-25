@@ -18,7 +18,7 @@ namespace WazeBotDiscord.Modules
         [Command]
         public async Task Help()
         {
-            await ReplyAsync("Use `!glossary term` to search the glossary for that term. Search terms must currently match exactly.");
+            await ReplyAsync("Use `!glossary term` to search the glossary for that term. Search terms must currently match exactly.\nThe glossary is located at: <https://wazeopedia.waze.com/wiki/USA/Glossary>");
         }
 
         [Command]

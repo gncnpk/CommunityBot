@@ -23,6 +23,7 @@ using WazeBotDiscord.Wikisearch;
 using WazeBotDiscord.Abbreviation;
 using WazeBotDiscord.ChannelSync;
 using WazeBotDiscord.Find;
+using WazeBotDiscord.BotManagement;
 
 namespace WazeBotDiscord
 {
@@ -46,6 +47,9 @@ namespace WazeBotDiscord
                 throw new ArgumentNullException(nameof(token), "No Discord API token env var found");
 
             VerifyEnvironmentVariables();
+
+            var validationKey = Environment.GetEnvironmentVariable("VALIDATION_KEY");
+            var endpointURL = Environment.GetEnvironmentVariable("BOT_ENDPOINT_URL");
 
             var clientConfig = new DiscordSocketConfig
             {
@@ -106,6 +110,8 @@ namespace WazeBotDiscord
 
             var findService = new FindService();
 
+            var botmanagementservice = new BotManagementService(httpClient, endpointURL, validationKey);
+
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(commands);
@@ -125,6 +131,7 @@ namespace WazeBotDiscord
             serviceCollection.AddSingleton(abbreviationService);
             serviceCollection.AddSingleton(channelSyncService);
             serviceCollection.AddSingleton(findService);
+            serviceCollection.AddSingleton(botmanagementservice);
 
             //client.Ready += async () => await client.SetGameAsync("with email addresses");
 

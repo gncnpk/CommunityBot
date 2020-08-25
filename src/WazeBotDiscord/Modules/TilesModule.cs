@@ -17,7 +17,7 @@ namespace WazeBotDiscord.Modules
         {
             await UpdateParseUpdatesAsync();
             var embed = CreateEmbed(_tilesResult);
-            await ReplyAsync("", embed: embed);
+            await ReplyAsync(Context.Message.Author.Mention, embed: embed);
         }
 
         async Task UpdateParseUpdatesAsync()
