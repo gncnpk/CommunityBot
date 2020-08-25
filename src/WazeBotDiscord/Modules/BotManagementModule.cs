@@ -22,10 +22,10 @@ namespace WazeBotDiscord.Modules
         public async Task RestartBot()
         {
             var success = await _botmanagementSvc.ExecuteBotService("restart");
-            if (success)
+            if (string.IsNullOrEmpty(success))
                 await ReplyAsync("Bot restart triggered");
             else
-                await ReplyAsync("Bot restart failed");
+                await ReplyAsync(success);
         }
 
         [Command("updatebot")]
@@ -33,7 +33,7 @@ namespace WazeBotDiscord.Modules
         public async Task UpdateBot()
         {
             var success = await _botmanagementSvc.ExecuteBotService("update");
-            if (success)
+            if (string.IsNullOrEmpty(success))
                 await ReplyAsync("Bot update triggered");
             else
                 await ReplyAsync("Bot update failed");
@@ -44,10 +44,10 @@ namespace WazeBotDiscord.Modules
         public async Task StopBot()
         {
             var success = await _botmanagementSvc.ExecuteBotService("stop");
-            if (success)
+            if (string.IsNullOrEmpty(success))
                 await ReplyAsync("Bot stop triggered");
             else
-                await ReplyAsync("Bot stop failed");
+                await ReplyAsync(success);
         }
     }
 }

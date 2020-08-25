@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WazeBotDiscord.Classes.Roles;
+using WazeBotDiscord.Classes.Servers;
 
 namespace WazeBotDiscord.Utilities
 {
@@ -16,7 +17,7 @@ namespace WazeBotDiscord.Utilities
             if (appInfo.Owner.Id == context.User.Id)
                 return PreconditionResult.FromSuccess();
 
-            if (context.Guild.Id != 300471946494214146 && context.Guild.Id != 347386780074377217) //National and Global servers
+            if (context.Guild.Id != Servers.National && context.Guild.Id != Servers.GlobalMapraid) //National and Global servers
                 return PreconditionResult.FromError("That command can only be used on the national & global server.");
 
             //National server and global or local champ roles OR Global server and admin role

@@ -3,6 +3,8 @@ using Discord.WebSocket;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using WazeBotDiscord.Classes.Roles;
+using WazeBotDiscord.Classes.Servers;
 
 namespace WazeBotDiscord.Utilities
 {
@@ -15,10 +17,10 @@ namespace WazeBotDiscord.Utilities
             if (appInfo.Owner.Id == context.User.Id)
                 return PreconditionResult.FromSuccess();
 
-            if (context.Guild.Id != 300471946494214146)
+            if (context.Guild.Id != Servers.National)
                 return PreconditionResult.FromError("That command can only be used on the national server.");
 
-            if (((SocketGuildUser)context.Message.Author).Roles.Any(r => r.Id == 300494132839841792 || r.Id == 300494182403801088))
+            if (((SocketGuildUser)context.Message.Author).Roles.Any(r => r.Id == GlobalChamp.Ids[Servers.National] || r.Id == LocalChamp.Ids[Servers.National]))
                 return PreconditionResult.FromSuccess();
 
             return PreconditionResult.FromError($"{context.Message.Author.Mention}: " + "You must be a champ to use that command.");
