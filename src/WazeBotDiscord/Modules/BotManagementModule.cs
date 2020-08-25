@@ -21,21 +21,19 @@ namespace WazeBotDiscord.Modules
         [RequireChampInNationalGuild]
         public async Task RestartBot()
         {
+            await ReplyAsync("Bot restart triggered");
             var success = await _botmanagementSvc.ExecuteBotService("restart");
-            if (string.IsNullOrEmpty(success))
-                await ReplyAsync("Bot restart triggered");
-            else
-                await ReplyAsync(success);
+            if (!success)
+                await ReplyAsync("Bot restart failed");
         }
 
         [Command("updatebot")]
         [RequireChampInNationalGuild]
         public async Task UpdateBot()
         {
+            await ReplyAsync("Bot update triggered");
             var success = await _botmanagementSvc.ExecuteBotService("update");
-            if (string.IsNullOrEmpty(success))
-                await ReplyAsync("Bot update triggered");
-            else
+            if (!success)
                 await ReplyAsync("Bot update failed");
         }
 
@@ -43,11 +41,10 @@ namespace WazeBotDiscord.Modules
         [RequireAppOwner]
         public async Task StopBot()
         {
+            await ReplyAsync("Bot stop triggered");
             var success = await _botmanagementSvc.ExecuteBotService("stop");
-            if (string.IsNullOrEmpty(success))
-                await ReplyAsync("Bot stop triggered");
-            else
-                await ReplyAsync(success);
+            if (!success)
+                await ReplyAsync("Bot stop failed");
         }
     }
 }

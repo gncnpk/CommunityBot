@@ -20,20 +20,21 @@ namespace WazeBotDiscord.BotManagement
             _validationKey = validationKey;
         }
 
-        public async Task<string> ExecuteBotService(string command)
+        public async Task<Boolean> ExecuteBotService(string command)
         {
             try
             {
                 await _client.GetAsync(_endpointURL + command + "/" + _validationKey);
-                return "";
+                return true;
             }
             catch(Exception ex)
             {
-                var log = "Endpoint: " + _endpointURL +
+                return false;
+                /*var log = "Endpoint: " + _endpointURL +
                     "\nValidation key: " + _validationKey +
                     "\n\n Error: " + ex.ToString();
                 Console.WriteLine(log);
-                return log;
+                return log;*/
             }
             
         }
