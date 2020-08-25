@@ -29,8 +29,11 @@ namespace WazeBotDiscord.BotManagement
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Exception:" + ex.ToString());
-                return ex.ToString();
+                var log = "Endpoint: " + _endpointURL +
+                    "\nValidation key: " + _validationKey +
+                    "\n\n Error: " + ex.ToString();
+                Console.WriteLine(log);
+                return log;
             }
             
         }
