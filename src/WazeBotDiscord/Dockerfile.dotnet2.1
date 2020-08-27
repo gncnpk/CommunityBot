@@ -25,6 +25,7 @@ COPY . .
 RUN dotnet publish -c release -o /bot --no-restore
 
 # Stage 2: clean, ready to run
+#   NOTE: at this point, we switch from SDK image (1.48GB) to Runtime image (87 ***MB***) to save space
 FROM mcr.microsoft.com/dotnet/core/runtime:2.1-alpine 
 WORKDIR /bot
 
