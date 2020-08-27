@@ -33,8 +33,10 @@ namespace WazeBotDiscord.Keywords
                     .Include(k => k.IgnoredGuilds)
                     .ToListAsync();
 
-                mutedChannels = await db.MutedChannels.ToListAsync();
-                mutedGuilds = await db.MutedGuilds.ToListAsync();
+                //mutedChannels = await db.MutedChannels.ToListAsync();
+                //mutedGuilds = await db.MutedGuilds.ToListAsync();
+                mutedChannels = await EntityFrameworkQueryableExtensions.ToListAsync(db.MutedChannels);
+                mutedGuilds = await EntityFrameworkQueryableExtensions.ToListAsync(db.MutedGuilds);
             }
 
             foreach (var k in keywords)
@@ -201,7 +203,8 @@ namespace WazeBotDiscord.Keywords
 
             using (var db = new WbContext())
             {
-                var dbRecord = await db.Keywords.FirstOrDefaultAsync(k => k.UserId == userId && k.Keyword == keyword);
+                //var dbRecord = await db.Keywords.FirstOrDefaultAsync(k => k.UserId == userId && k.Keyword == keyword);
+                var dbRecord = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(db.Keywords, k => k.UserId == userId && k.Keyword == keyword);
                 if (dbRecord == null)
                     return true;
 
@@ -462,8 +465,8 @@ namespace WazeBotDiscord.Keywords
 
             using (var db = new WbContext())
             {
-                var record = await db.MutedChannels
-                    .FirstOrDefaultAsync(c => c.UserId == userId && c.ChannelId == channelId);
+                //var record = await db.MutedChannels.FirstOrDefaultAsync(c => c.UserId == userId && c.ChannelId == channelId);
+                var record = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(db.MutedChannels, c => c.UserId == userId && c.ChannelId == channelId);
                 if (record == null)
                     return;
 
@@ -488,8 +491,8 @@ namespace WazeBotDiscord.Keywords
 
             using (var db = new WbContext())
             {
-                var record = await db.MutedGuilds
-                    .FirstOrDefaultAsync(c => c.UserId == userId && c.GuildId == guildId);
+                //var record = await db.MutedGuilds.FirstOrDefaultAsync(c => c.UserId == userId && c.GuildId == guildId);
+                var record = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(db.MutedGuilds, c => c.UserId == userId && c.GuildId == guildId);
                 if (record == null)
                     return;
 

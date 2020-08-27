@@ -19,7 +19,8 @@ namespace WazeBotDiscord.Announce
             _client = client;
             using (var db = new WbContext())
             {
-                _AnnounceChannels = await db.AnnounceList.ToListAsync();
+                //_AnnounceChannels = await db.AnnounceList.ToListAsync();
+                _AnnounceChannels = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync(db.AnnounceList);
             }
         }
 

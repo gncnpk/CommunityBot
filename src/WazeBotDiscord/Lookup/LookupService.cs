@@ -1,5 +1,5 @@
-﻿using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+﻿using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,8 @@ namespace WazeBotDiscord.Lookup
         {
             using (var db = new WbContext())
             {
-                _sheets = await db.SheetsToSearch.ToListAsync();
+                //_sheets = await db.SheetsToSearch.ToListAsync();
+                _sheets = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync(db.SheetsToSearch);
             }
         }
 
@@ -57,7 +58,7 @@ namespace WazeBotDiscord.Lookup
             if (!resp.IsSuccessStatusCode)
                 return "Spreadsheet is not configured correctly.";
 
-            var doc = await parser.ParseAsync(await resp.Content.ReadAsStringAsync());
+            var doc = await parser.ParseDocumentAsync(await resp.Content.ReadAsStringAsync());
 
             var tblHeader = doc.QuerySelectorAll("table.waffle > tbody > tr:first-of-type");
             var headerRowRaw = tblHeader.FirstOrDefault();

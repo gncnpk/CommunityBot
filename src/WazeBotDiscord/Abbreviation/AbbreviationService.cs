@@ -1,5 +1,5 @@
-﻿using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+﻿using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Discord;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -41,7 +41,7 @@ namespace WazeBotDiscord.Abbreviation
             if (!resp.IsSuccessStatusCode)
                 return new AbbreviationResponse { message = "Spreadsheet is not configured correctly." };
 
-            var doc = await parser.ParseAsync(await resp.Content.ReadAsStringAsync());
+            var doc = await parser.ParseDocumentAsync(await resp.Content.ReadAsStringAsync());
 
             var tblHeader = doc.QuerySelectorAll("table.waffle > tbody > tr:nth-child(3)");
             var headerRowRaw = tblHeader.FirstOrDefault();
@@ -133,9 +133,9 @@ namespace WazeBotDiscord.Abbreviation
             {
                 Color = new Color(147, 196, 211)
             };
-            embed.AddInlineField("Full name", String.Join("", fullNames.ToArray()));
-            embed.AddInlineField("Mapped as", String.Join("", mappedAs.ToArray()));
-            searchResult.results = embed;
+            embed.AddField("Full name", String.Join("", fullNames.ToArray()));
+            embed.AddField("Mapped as", String.Join("", mappedAs.ToArray()));
+            searchResult.results = embed.Build();
             //string resultString = result.ToString();
             //Regex regURL = new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
             //Match matchNA = regURL.Match(resultString);

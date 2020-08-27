@@ -1,5 +1,5 @@
-﻿using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+﻿using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace WazeBotDiscord.Scripts
 
             string sheetURL = $"https://docs.google.com/spreadsheets/u/1/d/1yrEZMrQyMjhgBAJuNj7Y8z0GxdKWgIEkHIQBhUM2H9k/pubhtml";
             var resp = await _client.GetAsync(sheetURL);
-            var doc = await parser.ParseAsync(await resp.Content.ReadAsStringAsync());
+            var doc = await parser.ParseDocumentAsync(await resp.Content.ReadAsStringAsync());
 
             var tblHeader = doc.QuerySelectorAll("table.waffle > tbody > tr:first-of-type");
             var headerRowRaw = tblHeader.FirstOrDefault();

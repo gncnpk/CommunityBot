@@ -1,5 +1,5 @@
-﻿using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+﻿using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -39,7 +39,7 @@ namespace WazeBotDiscord.Glossary
         {
             var parser = new HtmlParser();
             var body = await _httpClient.GetStringAsync("https://wazeopedia.waze.com/wiki/USA/Glossary");
-            var doc = await parser.ParseAsync(body);
+            var doc = await parser.ParseDocumentAsync(body);
 
             var tblRows = doc.QuerySelectorAll("tr[valign=\"top\"]");
 

@@ -1,10 +1,10 @@
 ﻿using System;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
-using AngleSharp.Dom.Html;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -32,7 +32,7 @@ namespace WazeBotDiscord.Wikisearch
                     var parser = new HtmlParser();
                     HttpClient _client = new HttpClient();
                     var resp = await _client.GetStringAsync("https://wazeopedia.waze.com/wiki/USA/index.php?title=Special%3ASearch&search=" + searchPhrase);
-                    var doc = await parser.ParseAsync(resp);
+                    var doc = await parser.ParseDocumentAsync(resp);
                     var searchResults = doc.QuerySelectorAll(".mw-search-results li");
                     if (searchResults.Length > 0)
                     {

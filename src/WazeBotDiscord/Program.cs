@@ -161,7 +161,7 @@ namespace WazeBotDiscord
             client.UserLeft += async (SocketGuildUser user) => await UserLeftEvent.Alert(user, client, serverLeaveService);
             client.UserJoined += async (SocketGuildUser user) => await UserJoinMessageEvent.SendMessage(user, client, serverJoinService);
 
-            await InstallCommands();
+            await InstallCommands(services);
 
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
@@ -169,10 +169,10 @@ namespace WazeBotDiscord
             await Task.Delay(-1);
         }
 
-        public async Task InstallCommands()
+        public async Task InstallCommands(IServiceProvider services)
         {
             client.MessageReceived += HandleCommand;
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
         }
 
         public async Task HandleCommand(SocketMessage messageParam)

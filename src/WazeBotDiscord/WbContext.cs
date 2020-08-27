@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MySQL.Data.Entity.Extensions;
+using Pomelo.EntityFrameworkCore.MySql.Extensions;
 using System;
 using WazeBotDiscord.Autoreplies;
 using WazeBotDiscord.Keywords;
@@ -32,7 +32,7 @@ namespace WazeBotDiscord
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(Environment.GetEnvironmentVariable("WAZEBOT_DB_CONNECTIONSTRING"));
+            optionsBuilder.UseMySql(Environment.GetEnvironmentVariable("WAZEBOT_DB_CONNECTIONSTRING"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

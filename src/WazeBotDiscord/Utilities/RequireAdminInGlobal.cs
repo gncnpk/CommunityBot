@@ -9,7 +9,7 @@ namespace WazeBotDiscord.Utilities
 {
     class RequireAdminInGlobal : PreconditionAttribute
     {
-        public async override Task<PreconditionResult> CheckPermissions(
+        public async override Task<PreconditionResult> CheckPermissionsAsync(
             ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var appInfo = await context.Client.GetApplicationInfoAsync();

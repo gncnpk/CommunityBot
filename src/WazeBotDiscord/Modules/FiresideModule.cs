@@ -25,7 +25,7 @@ namespace WazeBotDiscord.Modules
             if (channel.GetPermissionOverwrite(user) != null)
                 await channel.RemovePermissionOverwriteAsync(user);
             else
-                await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(readMessages: PermValue.Allow));
+                await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(viewChannel: PermValue.Allow));
         }
     }
 }

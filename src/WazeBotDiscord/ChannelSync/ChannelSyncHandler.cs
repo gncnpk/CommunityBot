@@ -34,7 +34,7 @@ namespace WazeBotDiscord.ChannelSync
                 var embed = new EmbedBuilder().WithAuthor(author).WithDescription(msg.Content);
 
                 var myChannel = client.GetChannel(channelToSyncTo) as IMessageChannel;
-                await myChannel.SendMessageAsync("", false, embed);
+                await myChannel.SendMessageAsync("", false, embed.Build());
                 foreach(Attachment attachment in msg.Attachments)
                 {
                     using (WebClient wc = new WebClient())
