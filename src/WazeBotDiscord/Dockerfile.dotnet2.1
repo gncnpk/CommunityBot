@@ -4,7 +4,7 @@
 
 # Alpine-based .NET Core 2.1 install 
 #       Alpine is a tiny Linux distro, often used in Docker containers for absolutely minimal image size
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1-alpine AS builder
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1-alpine AS builder2.1
 
 WORKDIR /source
 
@@ -29,7 +29,7 @@ RUN dotnet publish -c release -o /bot --no-restore
 FROM mcr.microsoft.com/dotnet/core/runtime:2.1-alpine 
 WORKDIR /bot
 
-COPY --from=builder /bot .
+COPY --from=builder2.1 /bot .
 
 # Entrypoint says what to do when you run the built container
 ENTRYPOINT [ "dotnet", "WazeBotDiscord.dll" ]
