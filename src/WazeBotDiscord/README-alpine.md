@@ -180,3 +180,21 @@ I can handle that.
 Build time after full clean: 2 minutes, 43 seconds.
 
 As expected, still 103MB.  That should be byte-identical to t3.micro build.
+
+Disk space with all docker processes and images wiped:
+
+```
+$ df -h
+Filesystem                Size      Used Available Use% Mounted on
+/dev/nvme0n1              4.9G    457.5M      4.2G  10% /
+```
+
+After build:
+
+```
+$ df -h
+iFilesystem                Size      Used Available Use% Mounted on
+/dev/nvme0n1              4.9G      1.6G      3.0G  35% /
+```
+
+So it takes about a gig of disk space to build this.  5G for the instance was actually good.
