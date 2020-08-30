@@ -151,7 +151,7 @@ Size after option: 103MB.  Didn't save any space, just easier on human eyes.
 Files after option: wow.  Nice.
 
 ```
-$ docker run -it --entrypoint /bin/sh communitybot:alpinetest-dotnet-3.
+$ docker run -it --rm --entrypoint /bin/sh communitybot:alpinetest-dotnet-3.1-alpine
 1-alpine
 /bot # ls -alF
 total 91060
@@ -161,13 +161,22 @@ drwxr-xr-x    1 root     root          4096 Aug 30 20:45 ../
 -rw-r--r--    1 root     root         85700 Aug 30 20:43 WazeBotDiscord.pdb
 ```
 
-Frigging two files 
+Frigging two files.
+
+The runtime-deps image is 9.86MB.  Like less than 10MB.
+
+We're adding our 93MB of self-contained, maximum pre-compiled executable to an impressively bare-bones image.
 
 Build time (no clean): 2 minutes, 8 seconds
 
 ### Wipe all processes, images, do full clean build before we switch to t3a.micro
 
-### When we're done, flip to t3a.micro
+Total time: 2 minutes, 24 seconds.
 
-Time full build
+I can handle that.
 
+### t3a.micro full build
+
+Build time after full clean: 2 minutes, 43 seconds.
+
+As expected, still 103MB.  That should be byte-identical to t3.micro build.
