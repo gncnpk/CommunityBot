@@ -3,7 +3,7 @@ services:
     communitybot:
         build: 
             context: .
-            dockerfile: Dockerfile.dotnet2.1
-        image: communitybot:dotnet-2.1-alpine
+            dockerfile: Dockerfile.dotnet3.1
+        image: communitybot:alpinetest-dotnet-3.1-alpine
         env_file: communitybot.env
         restart: always

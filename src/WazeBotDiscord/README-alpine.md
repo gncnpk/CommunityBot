@@ -76,3 +76,98 @@ $ cd git
 $ git clone https://gitlab.com/SixbucksSolutions/CommunityBot.git
 ```
 
+#### Building with just 3.1 to confirm it works
+
+```
+$ docker-compose build
+```
+
+### Success
+
+Able to build self-contained in 512MB RAM without bot running
+
+### Next optimization: Globalization invariant mode
+
+More info [here](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/globalization-invariant-mode.md)
+
+Was already in its own ItemGroup.  Cool.
+
+### Next optimization: trim
+
+More info [here](https://docs.microsoft.com/en-us/dotnet/core/deploying/trim-self-contained).
+
+Bombed out, probably due to not enough memory.
+
+### Increase instance size
+
+Shut down, increase instance size to t3.micro.
+
+### Retry trim
+
+Built in 65 seconds, nice!
+
+### Next optimization: aggressive trim
+
+More info [here](https://docs.microsoft.com/en-us/dotnet/core/deploying/trim-self-contained)
+
+Built in 85 seconds.
+
+### Wipe images, time FULL build
+
+1 minute 50 seconds.  Not bad.
+
+
+### Next optimization: Ready to run
+
+More info [here](https://docs.devexpress.com/WPF/401276/dotnet-core-support/deploy-netcore-application).
+
+Wiped all processes/images.
+
+Build time: 2 minutes 30 seconds -- that is expensive, but a one time cost
+
+
+### Next optimization: runtime deps image
+
+Now that we're self contained, we don't need full runtime image.
+
+Size with runtime: 180MB
+
+Size with runtime-deps: 103MB
+
+Build time: 7 minutes, 5 seconds. Ouch
+
+### Final optimization: single file
+
+More info [here](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish).
+
+Image size before option: 103MB
+
+Shell in: `docker run -it --entrypoint /bin/sh communitybot:alpinetest-dotnet-3.1-alpine`
+
+Files before option: `find /app -type f | wc -l` gave us 135 files
+
+Size after option: 103MB.  Didn't save any space, just easier on human eyes.
+
+Files after option: wow.  Nice.
+
+```
+$ docker run -it --entrypoint /bin/sh communitybot:alpinetest-dotnet-3.
+1-alpine
+/bot # ls -alF
+total 91060
+drwxr-xr-x    1 root     root          4096 Aug 30 20:45 ./
+drwxr-xr-x    1 root     root          4096 Aug 30 20:45 ../
+-rwxr-xr-x    1 root     root      93146768 Aug 30 20:44 WazeBotDiscord*
+-rw-r--r--    1 root     root         85700 Aug 30 20:43 WazeBotDiscord.pdb
+```
+
+Frigging two files 
+
+Build time (no clean): 2 minutes, 8 seconds
+
+### Wipe all processes, images, do full clean build before we switch to t3a.micro
+
+### When we're done, flip to t3a.micro
+
+Time full build
+
