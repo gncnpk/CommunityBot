@@ -17,7 +17,7 @@ namespace WazeBotDiscord.Classes.Roles
             [300482201198395417] = 300816449289584642, // New England - corrected
             [300481818619150336] = 300816001606352897, // Northeast (NOR) - corrected
             [299676784327393281] = 299704715405557760, // Mid Atlantic - corrected
-            [347386780074377217] = 347410199579197450, // Map Raid - corrected
+            [347386780074377217] = 347407927159816195, // Global/Mapraid
             //[360595895965843456] = , // Community Test Server
             [356076662812573698] = 356439601482563586, // VEOC - corrected
             [352258352417603587] = 352263231965888512, // Territories - corrected
