@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+    communitybot:
+        build: 
+            context: .
+            dockerfile: Dockerfile.dotnet6.0
+        image: communitybot:dotnet60-alpine
+        env_file: communitybot.env
+        restart: always
