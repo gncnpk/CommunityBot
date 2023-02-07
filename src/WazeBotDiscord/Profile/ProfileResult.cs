@@ -12,6 +12,8 @@ namespace WazeBotDiscord.Profile
 
         public string WikiProfile { get; set; }
 
+        public string DiscussProfile { get; set; }
+
         public string EditorName { get; set; }
     }
 }
