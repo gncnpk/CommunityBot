@@ -111,7 +111,11 @@ namespace WazeBotDiscord.Modules
             if (item.ForumProfile.Contains("waze.com"))
                 sr.AppendLine("[Forum Profile](" + item.ForumProfile + ")");
             else
-                sr.AppendLine(item.ForumProfile);
+                sr.AppendLine(item.ForumProfile); 
+            if (item.DiscussProfile.Contains("waze.com"))
+                sr.AppendLine("[Discuss Profile](" + item.DiscussProfile + ")");
+            else
+                sr.AppendLine(item.DiscussProfile);
             if (item.WikiProfile.Contains("waze.com"))
                 sr.AppendLine("[Wiki Profile](" + item.WikiProfile + ")");
             else
